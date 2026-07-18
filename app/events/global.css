@@ -1,0 +1,190 @@
+/* ═══════════════════════════════════
+   EVENTS PAGE — global.css
+   Only event-specific styles live here.
+   Carousel styles live in components/carousel/carousel.css
+═══════════════════════════════════ */
+
+.events_page {
+  background-color: #2d2c31;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.events_loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9b9390;
+  font-size: 16px;
+}
+
+/* ─── Tag colour system ─────────────
+   Add a new .events_tag_xxx here when
+   a new tag type is added to events.json
+──────────────────────────────────── */
+.events_tag_industry_night { color: #e7c84c; }
+.events_tag_workshop       { color: #6ec6a0; }
+.events_tag_competition    { color: #e07a5f; }
+.events_tag_social         { color: #8babd8; }
+
+.events_card_tag.events_tag_industry_night { background: #e7c84c; }
+.events_card_tag.events_tag_workshop       { background: #6ec6a0; }
+.events_card_tag.events_tag_competition    { background: #e07a5f; }
+.events_card_tag.events_tag_social         { background: #8babd8; }
+
+/* ═══════════════════════════════════
+   EVENT LISTING
+═══════════════════════════════════ */
+.events_listing_section {
+  padding: 64px 0 96px;
+  flex: 1;
+}
+
+.events_listing_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.events_listing_title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 700;
+  color: #f2eee7;
+  margin: 0;
+}
+
+.events_tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.events_tab {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(242, 238, 231, 0.2);
+  background: transparent;
+  color: #9b9390;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.events_tab:hover {
+  border-color: #e7c84c;
+  color: #e7c84c;
+}
+
+.events_tab_active {
+  background: #e7c84c;
+  border-color: #e7c84c;
+  color: #2a1c08;
+}
+
+.events_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.events_card {
+  background: #1c1a1e;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 238, 231, 0.07);
+  text-decoration: none;
+  display: block;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.events_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.events_card_img_wrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.events_card_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.events_card:hover .events_card_img {
+  transform: scale(1.05);
+}
+
+.events_card_tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #1c1a1e;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.events_card_body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.events_card_title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f2eee7;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.events_card_date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e7c84c;
+  margin: 0;
+}
+
+.events_card_location {
+  font-size: 12px;
+  color: #9b9390;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .events_grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .events_grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .events_grid { grid-template-columns: 1fr; }
+  .events_listing_header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

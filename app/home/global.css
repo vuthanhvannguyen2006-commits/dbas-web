@@ -4,13 +4,6 @@ html, body {
     padding: 0;
   }
 
-
-
-
-
-
-
-
 .about {
   background: linear-gradient(135deg, #f3efe9 0%, #e9e2d6 100%);
   padding: 90px 0; /* vertical only — MaxWidth handles horizontal */

@@ -1,0 +1,82 @@
+[
+    {
+      "id": "livroop-gill",
+      "name": "Livroop Gill",
+      "role": "President",
+      "image": "/member-images/livroop-gill.png",
+      "bio": "Liv leads DBAS with a vision to help build a safe, supportive space where students can bridge the gap between university and professional life while having fun. ",
+      "tags": ["Project Management", "Marketing", "Community Building"]
+    },
+    {
+        "id": "saamarth-nagpal",
+        "name": "Saamarth Nagpal",
+        "role": "Vice President",
+        "image": "/member-images/saamarth-nagpal.png",
+        "bio": "As Vice President of DBAS, Saamarth aims to create a welcoming space where students can network, ask questions freely, and ease into the technical side of analytics. ",
+        "tags": ["Marketing", "Design", "Content Creation"]
+      },
+    {
+      "id": "quynh-hoang",
+      "name": "Quynh Hoang",
+      "role": "Secretary",
+      "image": "/member-images/ngoc-truc-quynh-hoang.png",
+      "bio": "As the Secretary, Quynh aims to create a small discussion group where members can explore how Business Analytics is applied across different cultures, highlighting how local markets and cultural differences shape data‑driven decisions within DBAS.",
+      "tags": ["Analytics", "Beauty & Cosmetic Industry"]
+    },
+    {
+      "id": "senuri-shenara-fernando",
+      "name": "Senuri Shenara Fernando",
+      "role": "Treasurer",
+      "image": "/member-images/senuri-shenara-fernando.png",
+      "bio": "Through her role with DBAS, Sheni aims to strengthen her analytical skills, gain practical experience, and understand how data-driven insights are applied in real-world decision-making.",
+      "tags": ["Data & Business Analytics", "Data-Driven Decisions"]
+    },
+    {
+        "id": "norint-ek",
+        "name": "Norint Ek",
+        "role": "Director of Marketing",
+        "image": "/member-images/norint-ek.png",
+        "bio": "In the role of Director of Marketing for DBAS, Norint focuses on strengthening the society’s brand and engagement through data‑informed strategy.",
+        "tags": ["Marketing", "Data Interpretation", "Videography"]
+    },
+    {
+        "id": "rishita-sharma",
+        "name": "Rishita Sharma",
+        "role": "Director of Business & Consulting",
+        "image": "/member-images/rishita-sharma.png",
+        "bio": "In DBAS, Rishita aims to expand the Business & Consulting division by building industry‑focused initiatives, strengthening partnerships, and creating hands‑on consulting and analytics opportunities for members.",
+        "tags": ["Supply Chain Management", "Business Procurement", "Data-Driven Decisions"]
+    },
+
+    {
+        "id": "rudransh-sharma",
+        "name": "Rudransh Sharma",
+        "role": "Director of Events & Planning",
+        "image": "/member-images/rudransh-sharma.png",
+        "bio": "As the Director of Planning and Events at DBAS, Rudransh focuses on delivering well‑structured, efficient, and sustainable events.",
+        "tags": ["Supply Chain Management", "Business Procurement", "Data-Driven Decisions"]
+    },
+    {
+        "id": "van-nguyen",
+        "name": "Van Nguyen",
+        "role": "AI Officer",
+        "image": "/member-images/van-nguyen.jpeg",
+        "bio": "As a part of the AI Committee, Van seeks to explore how AI and digital tools can streamline DBAS's operations, turning manual processes into more efficient workflows for the committees.",
+        "tags": ["AI", "Web Development", "Decision Support Systems"]
+    },
+
+    {
+        "id": "nahal",
+        "name": "Nahal",
+        "role": "AI Committee Member",
+        "image": "/hero-3.png",
+        "bio": "...",
+        "tags": []
+    }
+
+    
+
+    
+    
+
+  ]

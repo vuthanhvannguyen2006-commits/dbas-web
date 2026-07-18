@@ -1,67 +1,97 @@
-import Image from "next/image";
+"use client";
+import "@/app/home/global.css";
+import MaxWidth from "@/components/max-width/max-width";
+import NavBar from "@/components/nav-bar/nav-bar";
+import Button from "@/components/button/button";
+import Hero from "@/components/hero/hero";
+import HoverCard from "@/components/hover-card/hover-card";
+import InstagramGrid from "@/components/instagram-grid/instagram-grid";
+import Footer from "@/components/footer/footer";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="page_wrapper">
+      {/* Navigation bar*/}
+      <NavBar />
+
+      {/* Hero */}
+      <Hero/>
+
+      {/* Who we are */}
+      <section id = "about" className="about">
+        <MaxWidth>
+          <div className="about_grid">
+            <div className="about_left">
+            <h1 className="heading_on_white">
+              <span className="heading_accent">Who</span> We Are
+            </h1>          
+            <h2 className="subtitle_on_white">Empowering Aspiring Business and Analytics Professionals</h2>
+              <p className="para_on_white">Deakin Business & Analytics Society is dedicated to supporting Deakin University students
+              who have a passion for business and analytics. We offer a dynamic
+              environment where members can develop essential skills, engage with
+              industry professionals and build lasting relationships. Through
+              various networking events, workshops and resources, we prepare our
+              members for successful careers in business and analytics.</p>
+              <a className="nav_button" href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
+                <Button text="Join Us"/>
+              </a>
+            </div>
+            <div className="about_right">
+              <img className="about_img" src="./who-we-are.png"/>
+            </div>
+          </div>
+        </MaxWidth>
+      </section>
+    
+      {/* What we do */}
+      <section className="activities">
+        <HoverCard />
+      </section>
+
+      {/* Instagram Grid */}
+      <section className="instagram_grid">
+        <InstagramGrid />
+      </section>
+
+      {/* Ending: Join Us Now*/}
+      <section className="ending_join">
+        <MaxWidth>
+          <div className="ending_join_overlay" />
+          <div className="ending_join_content">
+            <div className="ending_join_text">
+              <img className="ending_logo" src="./dbas-logo.png" />
+              <h1 className="heading_on_black">
+                JOIN US <span className="heading_accent">NOW</span>
+              </h1>
+              <p>
+                Sign up via DUSA to become a DBAS member and unlock a year of events,
+                networking, competitions and career opportunities.
+              </p>
+            </div>
+            <div className="ending_join_buttons">
+              <a
+              className="nav_button"
+              href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
+                <Button text="Join via DUSA" />
+              </a>
+              <a
+                className="nav_button"
+                href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
+                <Button text="Send Us an Email" />
+              </a>
+            </div>
+          </div>
+        </MaxWidth>
+      </section>
+
+      {/*Footer*/}
+      <section className="footer">
+        <Footer/>
+      </section>
     </div>
+
+
+
+
   );
 }
-
-

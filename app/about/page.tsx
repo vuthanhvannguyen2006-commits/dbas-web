@@ -1,16 +1,11 @@
-import Link from "next/link";
+import "@/app/about/global.css";
+import fs from "fs";
+import path from "path";
 import Image from "next/image";
-import {
-  ArrowRight,
-  BarChart3,
-  BriefcaseBusiness,
-  Network,
-  Target,
-} from "lucide-react";
-import { FaLinkedinIn } from "react-icons/fa";
+import { ArrowRight, BarChart3, BriefcaseBusiness, Network, Target } from "lucide-react";
 import NavBar from "@/components/nav-bar/nav-bar";
 import Footer from "@/components/footer/footer";
-import styles from "./about.module.css";
+import TeamSection, { type TeamMember } from "@/components/team-section/team-section";
 
 const joinUrl =
   "https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas";
@@ -33,73 +28,60 @@ const pillars = [
   },
 ];
 
-const team = [
-  {
-    name: "Stephen Harris",
-    role: "President",
-    image: "/hero-1.png",
-  },
-  {
-    name: "Rachel Nguyen",
-    role: "Vice President",
-    image: "/hero-2.png",
-  },
-  {
-    name: "James Patel",
-    role: "Events & Operations",
-    image: "/hero-3.png",
-  },
-];
+// Team content lives in /public/team.json instead of hardcoded in
+// this file, so updates don't require touching component code.
+function getTeamMembers(): TeamMember[] {
+  const filePath = path.join(process.cwd(), "public", "data", "team.json");
+  const raw = fs.readFileSync(filePath, "utf-8");
+  return JSON.parse(raw);
+}
 
 export default function AboutPage() {
+  const team = getTeamMembers();
+
   return (
-    <main className={styles.page}>
+    <main className="about-page">
       <NavBar />
 
-      <section className={styles.hero}>
-        <div className={styles.heroGlow} aria-hidden="true" />
-        <div className={styles.shell}>
-          <div className={styles.heroGrid}>
-            <div className={styles.heroCopy}>
-              <p className={styles.eyebrow}>
-                Deakin Business & Analytics Society
-              </p>
+      <section className="about-hero">
+        <div className="about-heroGlow" aria-hidden="true" />
+        <div className="about-shell">
+          <div className="about-heroGrid">
+            <div className="about-heroCopy">
               <h1>
                 About <span>Us</span>
               </h1>
-              <h2>Your gateway to success</h2>
-              <p className={styles.lead}>
-                We are a student-led community committed to fostering the next
+              <p className="about-lead">
+                We are a student-led community at Deakin University committed to fostering the next
                 generation of business and analytics leaders.
               </p>
-              <a className={styles.primaryButton} href={joinUrl}>
+              <a className="about-primaryButton" href={joinUrl}>
                 Join our community <ArrowRight size={18} />
               </a>
             </div>
 
-            <div className={styles.heroImageWrap}>
+            <div className="about-heroImageWrap">
               <Image
-                className={styles.heroImage}
-                src="/about-img.png"
+                className="about-heroImage"
+                src="/dbas-logo-black.png"
                 alt="DBAS members connecting at a professional event"
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 900px) 100vw, 55vw"
               />
-              <div className={styles.statCard}>
-                <strong>Learn. Connect. Grow.</strong>
-                <span>Opportunities built for Deakin students</span>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className={styles.story}>
-        <div className={`${styles.shell} ${styles.storyGrid}`}>
-          <div className={styles.storyCopy}>
-            <p className={styles.sectionLabel}>Who we are</p>
-            <h2>Empowering aspiring business professionals</h2>
+      <section className="about-story">
+        <div className="about-shell about-storyGrid">
+          <div>
+            <h1 className="heading_on_white">
+              <span className="heading_accent">WHO</span> WE ARE
+            </h1>
+            <h2 className="subtitle_on_white">Empowering Aspiring Business and Analytics Professionals</h2>
             <p>
               Deakin Business & Analytics Society is dedicated to supporting
               Deakin University students who have a passion for business and
@@ -112,108 +94,69 @@ export default function AboutPage() {
               prepare our members for successful careers in business and
               analytics.
             </p>
-            <a className={styles.textLink} href={joinUrl}>
+            <a className="about-textLink" href={joinUrl}>
               Become a member <ArrowRight size={17} />
             </a>
           </div>
 
-          <div className={styles.storyImage}>
+          <div className="about-storyImage">
             <Image
-              src="/hero-3.png"
+              src="/who-we-are.png"
               alt="DBAS members collaborating at a networking event"
               fill
               sizes="(max-width: 900px) 100vw, 45vw"
             />
-            <div className={styles.imageAccent} aria-hidden="true" />
+            <div className="about-imageAccent" aria-hidden="true" />
           </div>
         </div>
       </section>
 
-      <section className={styles.mission}>
-        <div className={styles.shell}>
-          <div className={styles.sectionHeading}>
+      <section className="about-mission">
+        <div className="about-shell">
+          <div>
             <div>
-              <p className={styles.sectionLabel}>Our mission &amp; vision</p>
-              <h2>Helping students turn ambition into opportunity</h2>
+              <h1 className="heading_on_black">
+                OUR <span className="heading_accent">MISSION & VISION</span>
+              </h1>
+              <h2 className="subtitle_on_black">Helping students turn Business and Analytics interests into opportunity</h2>
             </div>
             <p>
-              Our team is here to support members at every step—from their first
-              campus event to their first role in industry.
+              Our teams work to create an open environment for members to expand their professional network and gain relevant industry insights, preparing for a career in Business and Analytics.
             </p>
+            <br></br>
           </div>
 
-          <div className={styles.pillarGrid}>
+          <div className="about-pillarGrid">
             {pillars.map(({ icon: Icon, title, copy }) => (
-              <article className={styles.pillarCard} key={title}>
-                <div className={styles.iconBox}>
+              <article className="about-pillarCard" key={title}>
+                <div className="about-iconBox">
                   <Icon size={25} strokeWidth={1.8} />
                 </div>
-                <h3>{title}</h3>
+                <h2 className="subtitle_on_black">{title}</h2>
                 <p>{copy}</p>
               </article>
             ))}
           </div>
 
-          <div className={styles.visionStrip}>
+          <div className="about-visionStrip">
             <Target size={32} strokeWidth={1.5} />
-            <p>
-              <strong>Our vision</strong>
-              To be Deakin’s leading student community for future-focused
-              business and analytics professionals.
-            </p>
+            <h2 className="subtitle_on_black">
+              <span className="heading_accent">Our vision: </span>Become Deakin's leading student community for business and analytics professionals. 
+            </h2>
           </div>
         </div>
       </section>
 
-      <section className={styles.team}>
-        <div className={styles.shell}>
-          <div className={styles.teamHeading}>
-            <div>
-              <p className={styles.sectionLabel}>Meet the team</p>
-              <h2>Students building something meaningful</h2>
-            </div>
-            <Link className={styles.textLink} href="/contact">
-              Get in touch <ArrowRight size={17} />
-            </Link>
-          </div>
+      <TeamSection members={team} />
 
-          <div className={styles.teamGrid}>
-            {team.map((member) => (
-              <article className={styles.memberCard} key={member.name}>
-                <div className={styles.memberImage}>
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
-                  />
-                </div>
-                <div className={styles.memberInfo}>
-                  <div>
-                    <h3>{member.name}</h3>
-                    <p>{member.role}</p>
-                  </div>
-                  <a
-                    href="https://www.linkedin.com/company/deakinbas/"
-                    aria-label={`${member.name} on LinkedIn`}
-                  >
-                    <FaLinkedinIn size={16} />
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.cta}>
-        <div className={styles.shell}>
-          <div className={styles.ctaInner}>
+      <section className="about-cta">
+        <div className="about-shell">
+          <div className="about-ctaInner">
             <div>
-              <p className={styles.sectionLabel}>Ready to get involved?</p>
+              <p className="about-sectionLabel">Ready to get involved?</p>
               <h2>Your next opportunity starts here.</h2>
             </div>
-            <a className={styles.primaryButton} href={joinUrl}>
+            <a className="about-primaryButton" href={joinUrl}>
               Join DBAS <ArrowRight size={18} />
             </a>
           </div>

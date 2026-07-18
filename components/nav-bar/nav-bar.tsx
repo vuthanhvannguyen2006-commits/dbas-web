@@ -22,7 +22,7 @@ export default function NavBar() {
   }, []);
   
   return (
-    <nav>
+    <nav className="{styles.nav_wrapper}">
       <MaxWidth>
         <div className={styles.navbar}>
 
