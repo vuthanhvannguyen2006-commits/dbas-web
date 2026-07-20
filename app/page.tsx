@@ -7,6 +7,7 @@ import Hero from "@/components/hero/hero";
 import HoverCard from "@/components/hover-card/hover-card";
 import InstagramGrid from "@/components/instagram-grid/instagram-grid";
 import Footer from "@/components/footer/footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,27 +18,48 @@ export default function Home() {
       {/* Hero */}
       <Hero/>
 
-      {/* Who we are */}
+      {/* Why join DBAS */}
       <section id = "about" className="about">
         <MaxWidth>
           <div className="about_grid">
             <div className="about_left">
             <h1 className="heading_on_white">
-              <span className="heading_accent">Who</span> We Are
-            </h1>          
-            <h2 className="subtitle_on_white">Empowering Aspiring Business and Analytics Professionals</h2>
-              <p className="para_on_white">Deakin Business & Analytics Society is dedicated to supporting Deakin University students
-              who have a passion for business and analytics. We offer a dynamic
-              environment where members can develop essential skills, engage with
-              industry professionals and build lasting relationships. Through
-              various networking events, workshops and resources, we prepare our
-              members for successful careers in business and analytics.</p>
-              <a className="nav_button" href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
-                <Button text="Join Us"/>
-              </a>
+              Why <span className="heading_accent">DBAS?</span>
+            </h1>
+            <h2 className="subtitle_on_white">Find your people. Build your future.</h2>
+              <p className="para_on_white">
+                University is more than lectures. DBAS gives you a place to meet
+                ambitious students, learn from industry and turn your interests into
+                practical experience.
+              </p>
+              <div className="about_benefits" aria-label="DBAS membership benefits">
+                <div className="about_benefit">
+                  <span>01</span>
+                  <div><strong>Industry access</strong><small>Meet professionals and explore career pathways.</small></div>
+                </div>
+                <div className="about_benefit">
+                  <span>02</span>
+                  <div><strong>Practical skills</strong><small>Learn by doing through workshops and projects.</small></div>
+                </div>
+                <div className="about_benefit">
+                  <span>03</span>
+                  <div><strong>Real community</strong><small>Build friendships that continue beyond university.</small></div>
+                </div>
+              </div>
+              <Link className="nav_button" href="/about">
+                <Button text="Discover DBAS"/>
+              </Link>
             </div>
             <div className="about_right">
-              <img className="about_img" src="./who-we-are.png"/>
+              <img
+                className="about_img"
+                src="/social.jpeg"
+                alt="DBAS students together at a society event"
+              />
+              <div className="about_photoLabel">
+                <strong>Built by students</strong>
+                <span>For students</span>
+              </div>
             </div>
           </div>
         </MaxWidth>

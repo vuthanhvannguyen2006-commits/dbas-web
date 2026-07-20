@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
 html {
-  overflow-x: clip; 
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
@@ -21,12 +26,9 @@ body {
 }
 
 :root {
-  --content-max-width: clamp(900px, 90vw, 1600px);
+  --content-max-width: clamp(320px, 90vw, 1600px);
   --content-padding: clamp(1rem, 3vw, 2rem);
 }
-
-
-
 
 /* Text Formats */
 
@@ -62,27 +64,27 @@ body {
 /* Section Subtitles */
 .subtitle_on_white {
   color: #1f212b;
-  font-size: 22px;
+  font-size: clamp(18px, 5vw, 22px);
   font-weight: 600;
   margin: 0 0 40px;
 }
 .subtitle_on_black {
   color: #f2eee7;
-  font-size: 22px;
+  font-size: clamp(18px, 5vw, 22px);
   font-weight: 600;
   margin: 0 0 40px;
 }
 
 /* Paragraphs */
 .para_on_white {
-  font-size: 15px;
+  font-size: clamp(13px, 3vw, 15px);
   line-height: 1.7;
   color: #1f212b;
   margin: 0 0 36px;
   text-align: justify;
 }
 .para_on_black {
-  font-size: 15px;
+  font-size: clamp(13px, 3vw, 15px);
   line-height: 1.7;
   color: #f2eee7;
   margin: 0 0 36px;

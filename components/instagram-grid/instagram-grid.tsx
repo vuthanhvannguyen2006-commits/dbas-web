@@ -17,9 +17,10 @@ export default function InstagramGrid() {
     script.async = true;
     document.body.appendChild(script);
     script.onload = () => {
-      if ((window as any).instgrm) {
-        (window as any).instgrm.Embeds.process();
-      }
+      const instagramWindow = window as Window & {
+        instgrm?: { Embeds: { process: () => void } };
+      };
+      instagramWindow.instgrm?.Embeds.process();
     };
     return () => {
       document.body.removeChild(script);
@@ -29,7 +30,7 @@ export default function InstagramGrid() {
   return (
     <section className={styles.section}>
       <MaxWidth>
-        <h1 className="heading_on_white">
+        <h1 className={`heading_on_white ${styles.heading}`}>
           <span className="heading_accent">FOLLOW</span> OUR INSTAGRAM
         </h1>
         <h2 className="subtitle_on_white">

@@ -26,6 +26,11 @@ const pillars = [
     title: "A Strong Community",
     copy: "Find your people, share ideas and build relationships that last beyond university.",
   },
+  {
+    icon: Target,
+    title: "Our Vision",
+    copy: "Become Deakin's leading student community for business and analytics professionals.",
+  },
 ];
 
 // Team content lives in /public/team.json instead of hardcoded in
@@ -63,13 +68,16 @@ export default function AboutPage() {
             <div className="about-heroImageWrap">
               <Image
                 className="about-heroImage"
-                src="/dbas-logo-black.png"
-                alt="DBAS members connecting at a professional event"
+                src="/dbas-logo.png"
+                alt="Deakin Business and Analytics Society logo"
                 fill
                 priority
-                unoptimized
                 sizes="(max-width: 900px) 100vw, 55vw"
               />
+              <div className="about-heroLogoCaption">
+                <span>Deakin Business &amp; Analytics Society</span>
+                <small>Established 2022</small>
+              </div>
             </div>
           </div>
         </div>
@@ -138,12 +146,6 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <div className="about-visionStrip">
-            <Target size={32} strokeWidth={1.5} />
-            <h2 className="subtitle_on_black">
-              <span className="heading_accent">Our vision: </span>Become Deakin's leading student community for business and analytics professionals. 
-            </h2>
-          </div>
         </div>
       </section>
 

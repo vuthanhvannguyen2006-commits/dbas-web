@@ -1,53 +1,144 @@
-
-html, body {
-    margin: 0;
-    padding: 0;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
 .about {
-  background: linear-gradient(135deg, #f3efe9 0%, #e9e2d6 100%);
-  padding: 90px 0; /* vertical only — MaxWidth handles horizontal */
-  }
-  
+  background:
+    radial-gradient(circle at 8% 88%, rgba(191, 139, 72, 0.12), transparent 28%),
+    #f4efe7;
+  padding: clamp(72px, 9vw, 112px) 0;
+}
+
 .about_grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: clamp(48px, 8vw, 96px);
   align-items: center;
 }
-  
+
 .about_left {
   display: flex;
   flex-direction: column;
   max-width: 650px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.about_left h1{
+.about_left h1 {
   display: inline-block;
   width: fit-content;
-  letter-spacing: 0.06em;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin: 0 0 24px;
+  margin: 0 0 20px;
 }
-.about_left p{
+.about_left h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+}
+.about_left p {
   width: fit-content;
+  max-width: 590px;
+  font-family: Arial, Helvetica, sans-serif;
 }
-.about_left .nav_button{
+.about_benefits {
+  display: grid;
+  gap: 0;
+  margin: -10px 0 30px;
+  border-top: 1px solid rgba(32, 26, 22, 0.12);
+}
+.about_benefit {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(32, 26, 22, 0.12);
+}
+.about_benefit > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: #8e5c20;
+  background: rgba(231, 200, 76, 0.18);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+}
+.about_benefit div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.about_benefit strong {
+  color: #201a16;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+.about_benefit small {
+  color: #756b63;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.about_left .nav_button {
   display: inline-block;
   width: fit-content;
   text-decoration: none;
 }
 
-.about_right{
+.about_right {
   position: relative;
 }
+.about_right::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  width: 72%;
+  height: 72%;
+  border: 2px solid #c99537;
+  border-radius: 18px;
+}
 
-.about_img{
+.about_img {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  height: 420px;
+  height: clamp(340px, 32vw, 420px);
+  min-height: 320px;
+  aspect-ratio: 5/4;
   object-fit: cover;
+  object-position: center 58%;
   border-radius: 18px;
   display: block;
+}
+.about_photoLabel {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  color: #f6f0e8;
+  background: rgba(17, 13, 10, 0.86);
+  border: 1px solid rgba(231, 200, 76, 0.35);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+.about_photoLabel strong {
+  color: #e7c84c;
+  font-size: 13px;
+}
+.about_photoLabel span {
+  font-size: 12px;
 }
 
 @media (max-width: 860px) {
@@ -57,18 +148,25 @@ html, body {
   .about_grid {
     grid-template-columns: 1fr;
   }
-  .about_img { height: 320px; }
-  .about_left h2 { font-size: 32px; }
+  .about_left {
+    max-width: none;
+  }
+  .about_img {
+    height: 320px;
+  }
+  .about_right::after {
+    right: -10px;
+    bottom: -10px;
+  }
 }
 
 /* What we do */
 
 .activities {
   background: #110d0a;
-  padding: 64px 32px;
+  padding: 64px 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
-
 
 /* Ending: Join us now */
 .ending_join {
@@ -98,8 +196,8 @@ html, body {
   text-align: center;
   max-width: 640px;
   margin: 0 auto;
-  padding: 80px 24px;
-  gap: 32px;
+  padding: clamp(40px, 10vw, 80px) clamp(16px, 5vw, 24px);
+  gap: clamp(16px, 5vw, 32px);
 }
 
 .ending_join_text {
@@ -114,7 +212,6 @@ html, body {
   margin-bottom: 20px;
 }
 
-
 .ending_join_text p {
   color: #d9d0c6;
   font-size: 17px;
@@ -124,9 +221,10 @@ html, body {
 
 .ending_join_buttons {
   display: flex;
-  gap: 16px;
+  gap: clamp(12px, 3vw, 16px);
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
 }
 
 @media (max-width: 640px) {

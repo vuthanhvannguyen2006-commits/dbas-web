@@ -53,22 +53,22 @@ export default function Footer() {
             <div className={styles.footer_main}>
               {/*Navigation menu*/}
               <ul className={styles.links_container}>
-                  <h1> MENU </h1>
-                  <Link className={styles.nav_item} href="/">
+                  <li><h1> MENU </h1></li>
+                  <li><Link className={styles.nav_item} href="/">
                     <h4 className={styles.nav_text}>Home</h4>
-                  </Link>
-                  <Link className={styles.nav_item} href="/about">
+                  </Link></li>
+                  <li><Link className={styles.nav_item} href="/about">
                     <h4 className={styles.nav_text}>About</h4>
-                  </Link>
-                  <Link className={styles.nav_item} href="/events">
+                  </Link></li>
+                  <li><Link className={styles.nav_item} href="/events">
                     <h4 className={styles.nav_text}>Events</h4>
-                  </Link>
-                  <Link className={styles.nav_item} href="/contact">
+                  </Link></li>
+                  <li><Link className={styles.nav_item} href="/contact">
                     <h4 className={styles.nav_text}>Contact</h4>
-                  </Link>
-                  <Link className={styles.nav_item} href="/faq">
+                  </Link></li>
+                  <li><Link className={styles.nav_item} href="/faq">
                     <h4 className={styles.nav_text}>FAQ</h4>
-                  </Link>
+                  </Link></li>
               </ul>
               {/*Contact Details*/}
               <div className={styles.footer_contact}>

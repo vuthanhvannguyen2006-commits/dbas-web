@@ -1,4 +1,5 @@
 .button {
+  display: inline-block;
   background-image: linear-gradient(to right, #e7c84c);
   border: none ;
   padding: 10px;
