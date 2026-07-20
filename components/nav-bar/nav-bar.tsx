@@ -127,14 +127,10 @@ export default function NavBar() {
               <li><Link href="/" className={styles.hamburger_link} onClick={closeMenu}>Home</Link></li>
               <li><Link href="/about" className={styles.hamburger_link} onClick={closeMenu}>About Us</Link></li>
               <li><Link href="/events" className={styles.hamburger_link} onClick={closeMenu}>Events</Link></li>
-              <li><Link href="/contact" className={styles.hamburger_link} onClick={closeMenu}>Contact</Link></li>
               <li className={styles.mobileJoinItem}><a className={styles.mobileJoin} href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
                 <Button text="Join Us"/>
               </a></li>
           </ul>
-
-
-
 
         </div>
       </MaxWidth>
