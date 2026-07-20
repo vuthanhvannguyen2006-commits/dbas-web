@@ -61,7 +61,7 @@
         "name": "Van Nguyen",
         "role": "AI Officer",
         "image": "/member-images/van-nguyen.jpeg",
-        "bio": "As a part of the AI Committee, Van seeks to explore how AI and digital tools can streamline DBAS's operations, turning manual processes into more efficient workflows for the committees.",
+        "bio": "As a part of the AI Committee, Van seeks to harness AI and digital innovation to redefine how DBAS operates, turning manual processes into more efficient workflows for different committees.",
         "tags": ["AI", "Web Development", "Decision Support Systems"]
     },
 
@@ -69,9 +69,9 @@
         "id": "nahal",
         "name": "Nahal",
         "role": "AI Committee Member",
-        "image": "/hero-3.png",
-        "bio": "...",
-        "tags": []
+        "image": "",
+        "bio": "Nahal is passionate about building a connected and supportive student community. Through developing the DBAS website and contributing to initiatives, she aims to make it easier for students to engage, connect, and stay informed.",
+        "tags": ["Community Building", "AI", "Data Science"]
     }
 
     

@@ -344,11 +344,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .hero_right {
-    display: none;
-  }
-}
 
 @media (max-width: 480px) {
   .rotate_word {

@@ -63,12 +63,6 @@ export default function Footer() {
                   <li><Link className={styles.nav_item} href="/events">
                     <h4 className={styles.nav_text}>Events</h4>
                   </Link></li>
-                  <li><Link className={styles.nav_item} href="/contact">
-                    <h4 className={styles.nav_text}>Contact</h4>
-                  </Link></li>
-                  <li><Link className={styles.nav_item} href="/faq">
-                    <h4 className={styles.nav_text}>FAQ</h4>
-                  </Link></li>
               </ul>
               {/*Contact Details*/}
               <div className={styles.footer_contact}>

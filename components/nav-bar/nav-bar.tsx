@@ -85,11 +85,6 @@ export default function NavBar() {
                   Events
                 </span> 
             </Link></li>
-            <li><Link href="/contact" className={styles.nav_item}>
-                <span className={styles.nav_text}>
-                  Contact
-                </span> 
-            </Link></li>
           </ul>  
           {/* "Join Us" button */}
           <a className={styles.nav_button} href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">

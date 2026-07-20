@@ -39,7 +39,7 @@ export default function Hero() {
           </div>
 
           <p className={styles.hero_subtext}>
-            Deakin Business & Analytics Society — building skills,
+            Deakin Business & Analytics Society, where you build skills,
             relationships and careers.
           </p>
 
