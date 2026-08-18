@@ -148,6 +148,38 @@ You can run it by hand any time from the Actions tab.
 
 ---
 
+## Backups — read this before you need it
+
+**The Supabase free plan has no automatic backups.** Supabase back up Pro,
+Team and Enterprise projects daily; Free is not included, and point-in-time
+recovery is not available on it either. If someone deletes every event, there
+is nothing on Supabase's side to restore from.
+
+What does protect you:
+
+| What | Where it lives | Gap |
+|---|---|---|
+| Published events and team members | `public/data/*.json`, rewritten and committed by the weekly job | Up to a week out of date; published rows only |
+| Tables, security rules, roles | `supabase/migrations/` in this repository | None — re-runnable from scratch |
+| **Committee logins** | **Nowhere** | Would have to be re-created by hand in Supabase |
+
+Because the weekly job commits its output, git history is effectively a
+versioned backup of the site's content. To recover something deleted, look
+through the history of `public/data/` or the migration files, rather than
+Supabase.
+
+**Before anything risky** — a bulk delete, a schema change, handing over to a
+new committee — take a manual snapshot by running the workflow from the Actions
+tab, or locally:
+
+```
+node scripts/export-content.mjs
+```
+
+Then commit the result. That is a restore point.
+
+---
+
 ## Backing out entirely
 
 If this ever needs to be undone, the old way still works. The public pages read
