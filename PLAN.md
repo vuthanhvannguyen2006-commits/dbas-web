@@ -431,7 +431,7 @@ await supabase.storage.from('media').remove(['team/livroop-gill.png'])          
 
 Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor. **Phases 2 and 7 are marked important**: for each, run the builder-plus-blind-critic loop against that phase's acceptance criteria, looping to consensus, three rounds maximum, using sub-agents to parallelise where the work allows.
 
-- [ ] **Phase 0: User-performed setup** *(the executor cannot do this — it needs account access)*
+- [x] **Phase 0: User-performed setup** *(the executor cannot do this — it needs account access)*
       Done when: a Supabase project exists, `.env.local` holds the URL and anon key, and the service role key is available to the shell as an environment variable.
       Steps:
       - Create a Supabase project (personal account for now, per Q5). **Region: `ap-southeast-2` (Oceania / Sydney)** — not Singapore, even if the UI recommends it. The browser queries Supabase directly on every public page load, so region distance is user-visible latency; the audience is in Melbourne; and the region cannot be changed later without migrating into a new project (verified: [Migrating within Supabase](https://supabase.com/docs/guides/platform/migrating-within-supabase)). Keeping member names, photos, and bios onshore in Australia is also the simpler position for a university society.
@@ -440,7 +440,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Note the live site's public URL — Phase 1 needs it.
       - Copy the **service role** key from Supabase → Settings → API and export it as `SUPABASE_SERVICE_ROLE_KEY` in the shell only. Do not put it in `.env.local`; do not commit it anywhere.
 
-- [ ] **Phase 1: Restore hosting, and verify every load-bearing assumption**
+- [x] **Phase 1: Restore hosting, and verify every load-bearing assumption**
       Done when: the site is live on Vercel under a committee-controlled account and serves `/`, `/about`, `/events` without a 404; the Supabase client is installed and its API shape confirmed by reading the installed types.
       Steps:
       - [x] `npm install @supabase/supabase-js` — installed **2.112.3**; `createClient` confirmed exported from `dist/index.d.mts` (verified this session). **[A1] closed.**
@@ -452,7 +452,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - [ ] Decide the fate of `.github/workflows/nextjs.yml`: delete it, or leave it with a comment saying it is unused. Leaving it silently is what caused this plan's first draft to describe the wrong architecture.
       Covers: R16; checks: A1, A4
 
-- [ ] **Phase 2: Schema, roles, and Row Level Security** — ***important: run the critic loop***
+- [x] **Phase 2: Schema, roles, and Row Level Security** — ***important: run the critic loop***
       Done when: every check in the adversarial suite is rejected, an admin session can write both tables, and each rejection is shown as actual console output rather than asserted.
       Steps:
       - Create `profiles`, `events`, `team_members` exactly as specified, including `events.slug`.
@@ -463,7 +463,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Create two accounts from the dashboard and confirm each got a `profiles` row [A8]; promote one to `admin`. Run the full adversarial suite from the anonymous, editor, and admin positions.
       Covers: R3, R5, R6, R7, R15; checks: A1, A8
 
-- [ ] **Phase 3: Admin shell — sign-in, branding, scrollbar**
+- [x] **Phase 3: Admin shell — sign-in, branding, scrollbar**
       Done when: `/admin` shows a sign-in form; valid credentials reach a dashboard with Events and Team tabs (empty is fine); an editor sees no Team tab; a heading's computed `font-family` is Playfair Display; scrollbars are gold on dark in Chrome and Firefox.
       Steps:
       - Promote the brand variables from `app/about/global.css:2-5` to `:root` in `app/globals.css` as `--dbas-gold` `#e7c84c`, `--dbas-gold-deep` `#c99537`, `--dbas-ink` `#110d0a`, `--dbas-cream` `#f4efe7`, leaving the existing `.about-page` declarations untouched so nothing currently rendering changes. Also define the missing `--background` and `--foreground` that `globals.css` already references.
@@ -473,7 +473,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Gate the Team tab on the caller's role (UI convenience; the database is the real gate).
       Covers: R1, R2, R10, R11; checks: A3, A5
 
-- [ ] **Phase 4: Events section — create, edit, delete**
+- [x] **Phase 4: Events section — create, edit, delete**
       Done when: an event created in the form appears in the dashboard list immediately; editing changes it; deleting asks first; an empty submission names the missing field; an event dated yesterday appears under Past without further action.
       Steps:
       - List view: all events by `starts_at` descending, grouped upcoming and past, featured marked.
