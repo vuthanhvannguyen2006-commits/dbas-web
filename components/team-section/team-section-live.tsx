@@ -19,9 +19,25 @@ export default function TeamSectionLive({ fallback }: { fallback: TeamMember[] }
 
     loadTeam()
       .then(({ members: live, source }) => {
-        // Only replace on a real database answer. A "fallback" result means the
-        // loader re-fetched the same JSON we already rendered.
-        if (cancelled || source !== "database") return;
+        if (cancelled) return;
+
+        // A "fallback" result means the loader re-fetched the same JSON already
+        // rendered, so there is nothing to swap in.
+        if (source !== "database") return;
+
+        // An empty answer from a reachable database is not proof the society
+        // has no committee — far likelier is everyone accidentally unpublished,
+        // or a policy change filtering every row. There is no way to tell the
+        // two apart from here, and a blank team section on the live site is the
+        // worse mistake, so keep what is already showing.
+        if (live.length === 0) {
+          console.warn(
+            "Team: the database returned no published members; keeping the built-in list. " +
+              "If the committee really is empty, this message is expected."
+          );
+          return;
+        }
+
         setMembers(live as TeamMember[]);
       })
       .catch((err) => console.warn("Team: keeping the built-in list.", err));

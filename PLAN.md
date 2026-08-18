@@ -497,7 +497,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Render helper treating values starting with `http` as absolute Storage URLs and anything else as a `/public` path, so `events/party.png` keeps working (R8).
       Covers: R8
 
-- [ ] **Phase 7: Import the data and rewire the public pages** — ***important: run the critic loop***
+- [x] **Phase 7: Import the data and rewire the public pages** — ***important: run the critic loop***
       Done when: `/events` and `/about` render live database content; blocking `supabase.co` in devtools makes both fall back to JSON with no visible error; an empty database shows a styled empty state; no featured event does not crash the carousel; `npm run build` still produces `out/`.
       Steps:
       - **Write `scripts/import-json.mjs`** per the Migration spec — reads both JSON files, upserts on `slug`, uses `SUPABASE_SERVICE_ROLE_KEY` from the environment, skips the `upcoming` duplicate of the `current` event. Then run it.

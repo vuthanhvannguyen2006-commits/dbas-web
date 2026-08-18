@@ -30,7 +30,10 @@ export type PublicMember = {
   linkedin?: string | null;
 };
 
-export type Source = "database" | "fallback";
+/* "unavailable" means neither source could be read — distinct from a source
+   that answered and genuinely had nothing. Callers must not treat the two the
+   same, or an outage renders as "this club has no events". */
+export type Source = "database" | "fallback" | "unavailable";
 
 type LegacyEvent = {
   id?: number | string;
@@ -45,19 +48,63 @@ type LegacyEvent = {
   link?: string;
 };
 
-function fromLegacy(e: LegacyEvent, featured: boolean): PublicEvent {
+function fromLegacy(e: LegacyEvent, featured: boolean, index: number): PublicEvent {
+  const startsAt = parseLegacyDateTime(e.date ?? "", e.time ?? "");
+
+  // A date the parser rejects would otherwise slide quietly into "past" with
+  // no date shown and no clue why. Say so.
+  if (!startsAt) {
+    console.warn(
+      `Event "${e.title}" has an unreadable date/time ("${e.date}" / "${e.time}") and will be listed under Past.`
+    );
+  }
+
   return {
-    id: String(e.id ?? e.title ?? Math.random()),
+    // Stable, not random: a fresh id per load would remount every card.
+    id: String(e.id ?? e.title ?? `legacy-${index}`),
     tag: e.tag ?? "Social",
     title: e.title ?? "Untitled event",
     description: e.description ?? null,
-    startsAt: parseLegacyDateTime(e.date ?? "", e.time ?? ""),
+    startsAt,
     location: e.location ?? "",
     image: resolveImageUrl(e.image) ?? "",
     cta: e.cta ?? null,
     link: e.link ?? "",
     isFeatured: featured,
   };
+}
+
+type LegacyEventsFile = {
+  current?: LegacyEvent;
+  upcoming?: LegacyEvent[];
+  past?: LegacyEvent[];
+};
+
+/** Turns the old events.json shape into the normalised one.
+
+    Exported because it runs in two places: on the server at build time, to
+    embed a fallback in the page, and in the browser if the database is
+    unreachable. */
+export function adaptLegacyEvents(json: LegacyEventsFile): PublicEvent[] {
+  // The old file lists the featured event twice, once under "current" and
+  // again under "upcoming". Match on title and date so it is not shown twice.
+  const seen = new Set<string>();
+  const out: PublicEvent[] = [];
+  let index = 0;
+
+  for (const [item, featured] of [
+    [json.current, true] as const,
+    ...((json.upcoming ?? []) as LegacyEvent[]).map((e) => [e, false] as const),
+    ...((json.past ?? []) as LegacyEvent[]).map((e) => [e, false] as const),
+  ]) {
+    if (!item) continue;
+    const key = `${item.title}|${item.date}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(fromLegacy(item, featured, index++));
+  }
+
+  return out;
 }
 
 export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Source }> {
@@ -88,27 +135,17 @@ export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Sou
     console.warn("Events: falling back to committed JSON.", error?.message);
   }
 
-  const res = await fetch("/data/events.json");
-  const json = await res.json();
-
-  // The old file listed the featured event twice, once under "current" and
-  // again under "upcoming". Match on title and date so the duplicate does not
-  // appear as a second card.
-  const seen = new Set<string>();
-  const out: PublicEvent[] = [];
-  for (const [item, featured] of [
-    [json.current, true] as const,
-    ...((json.upcoming ?? []) as LegacyEvent[]).map((e) => [e, false] as const),
-    ...((json.past ?? []) as LegacyEvent[]).map((e) => [e, false] as const),
-  ]) {
-    if (!item) continue;
-    const key = `${item.title}|${item.date}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(fromLegacy(item, featured));
+  // Second line of defence, and it can fail too — the file could be missing
+  // from a deploy. Failing here must not look the same as "this club has no
+  // events", so the caller is told the load failed and keeps what it had.
+  try {
+    const res = await fetch("/data/events.json");
+    if (!res.ok) throw new Error(`events.json returned ${res.status}`);
+    return { events: adaptLegacyEvents(await res.json()), source: "fallback" };
+  } catch (err) {
+    console.error("Events: the committed JSON could not be read either.", err);
+    return { events: [], source: "unavailable" };
   }
-
-  return { events: out, source: "fallback" };
 }
 
 export async function loadTeam(): Promise<{ members: PublicMember[]; source: Source }> {
@@ -137,20 +174,26 @@ export async function loadTeam(): Promise<{ members: PublicMember[]; source: Sou
     console.warn("Team: falling back to committed JSON.", error?.message);
   }
 
-  const res = await fetch("/data/team.json");
-  const json = (await res.json()) as Array<Record<string, unknown>>;
-  return {
-    source: "fallback",
-    members: json.map((m) => ({
-      id: String(m.id),
-      name: String(m.name ?? ""),
-      role: String(m.role ?? ""),
-      image: resolveImageUrl(m.image as string) ?? "",
-      bio: String(m.bio ?? ""),
-      tags: (m.tags as string[]) ?? [],
-      linkedin: null,
-    })),
-  };
+  try {
+    const res = await fetch("/data/team.json");
+    if (!res.ok) throw new Error(`team.json returned ${res.status}`);
+    const json = (await res.json()) as Array<Record<string, unknown>>;
+    return {
+      source: "fallback",
+      members: json.map((m) => ({
+        id: String(m.id),
+        name: String(m.name ?? ""),
+        role: String(m.role ?? ""),
+        image: resolveImageUrl(m.image as string) ?? "",
+        bio: String(m.bio ?? ""),
+        tags: (m.tags as string[]) ?? [],
+        linkedin: null,
+      })),
+    };
+  } catch (err) {
+    console.error("Team: the committed JSON could not be read either.", err);
+    return { members: [], source: "unavailable" };
+  }
 }
 
 /** Upcoming vs past comes from the date alone. An event with no usable date —

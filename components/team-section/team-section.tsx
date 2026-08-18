@@ -18,6 +18,15 @@ export type TeamMember = {
   linkedin?: string | null;
 };
 
+function initialsOf(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 export default function TeamSection({ members }: { members: TeamMember[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const active = activeIndex === null ? null : members[activeIndex];
@@ -62,12 +71,20 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
               aria-haspopup="dialog"
             >
               <div className="about-memberImage">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
-                />
+                {member.image ? (
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
+                  />
+                ) : (
+                  // Not every member has supplied a photo. An empty src renders
+                  // as a broken image, so show their initials instead.
+                  <div className="about-memberInitials" aria-hidden="true">
+                    {initialsOf(member.name)}
+                  </div>
+                )}
                 <div className="about-memberOverlay" aria-hidden="true">
                   <span className="about-memberOverlayText">
                     Meet {member.name.split(" ")[0]}
@@ -104,12 +121,18 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
             </button>
 
             <div className="about-modalMedia">
-              <Image
-                src={active.image}
-                alt={active.name}
-                fill
-                sizes="(max-width: 900px) 100vw, 40vw"
-              />
+              {active.image ? (
+                <Image
+                  src={active.image}
+                  alt={active.name}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 40vw"
+                />
+              ) : (
+                <div className="about-memberInitials" aria-hidden="true">
+                  {initialsOf(active.name)}
+                </div>
+              )}
             </div>
 
             <div className="about-modalBody">

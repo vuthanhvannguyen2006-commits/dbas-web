@@ -774,3 +774,18 @@
 .about-modalLinkedIn:hover {
   background: rgba(231, 200, 76, 0.14);
 }
+
+/* Shown in place of a photo for members who have not supplied one. An empty
+   src renders as a broken image icon, which looks like a fault rather than an
+   absence. */
+.about-memberInitials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #241d17, #17110d);
+  color: var(--about-gold);
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: clamp(32px, 7vw, 56px);
+  letter-spacing: 2px;
+}
