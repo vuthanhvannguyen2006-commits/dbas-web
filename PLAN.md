@@ -507,7 +507,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Re-run `npm run build`; it must still complete with no errors, and the Vercel preview deployment for the branch must serve all four routes.
       Covers: R4, R6, R8, R9, R16
 
-- [ ] **Phase 8: Keep-alive, deploy configuration, and handover**
+- [x] **Phase 8: Keep-alive, deploy configuration, and handover**
       Done when: `.github/workflows/keepalive.yml` runs green on a manual trigger and commits refreshed JSON; the deploy workflow passes the Supabase variables to the build step; a dashboard-created event is confirmed visible on the **live deployed** site; `HANDOVER.md` exists.
       Steps:
       - Confirm whether the repository is public [A9].
