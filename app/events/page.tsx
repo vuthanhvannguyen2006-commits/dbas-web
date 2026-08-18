@@ -1,45 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "@/components/nav-bar/nav-bar";
 import Footer from "@/components/footer/footer";
 import MaxWidth from "@/components/max-width/max-width";
 import Carousel, { type Slide } from "@/components/carousel/carousel";
 import EventCard from "@/components/events-card/events-card";
+import { loadEvents, splitByDate, type PublicEvent } from "@/lib/content";
+import { formatEventDay, formatEventTime } from "@/lib/datetime";
 import "@/app/events/global.css";
 
-type CurrentEvent = {
-  id: number;
-  tag: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  image: string;
-  cta: string;
-  link: string;
-};
-
-type Event = {
-  id: number;
-  tag: string;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  image: string;
-  link: string;
-};
-
-type EventsData = {
-  current: CurrentEvent;
-  upcoming: Event[];
-  past: Event[];
-};
-
-/* Two generic filler slides — always shown alongside the current event
-   so the carousel always has 3 slides and feels alive.
-   Edit the text/images here to suit your branding. */
+/* Two generic filler slides — always shown alongside the featured event
+   so the carousel always has something to show, even with no events at all. */
 const GENERIC_SLIDES: Slide[] = [
   {
     id: 98,
@@ -63,33 +34,44 @@ const GENERIC_SLIDES: Slide[] = [
   },
 ];
 
-/* Convert the current event → generic Slide shape */
-function toSlide(ev: CurrentEvent): Slide {
+function toSlide(ev: PublicEvent): Slide {
+  const meta: string[] = [];
+  if (ev.startsAt) meta.push(`📅 ${formatEventDay(ev.startsAt)} · ${formatEventTime(ev.startsAt)}`);
+  if (ev.location) meta.push(`📍 ${ev.location}`);
+
   return {
     id: ev.id,
     image: ev.image,
     imageAlt: ev.title,
     tag: ev.tag,
     title: ev.title,
-    description: ev.description,
-    meta: [`📅 ${ev.date} · ${ev.time}`, `📍 ${ev.location}`],
-    cta: ev.cta,
+    description: ev.description ?? undefined,
+    meta,
+    cta: ev.cta ?? "Find out more",
     link: ev.link,
   };
 }
 
 export default function EventsPage() {
-  const [data, setData] = useState<EventsData | null>(null);
+  const [events, setEvents] = useState<PublicEvent[] | null>(null);
   const [tab, setTab] = useState<"upcoming" | "past">("upcoming");
 
   useEffect(() => {
-    fetch("/data/events.json")
-      .then((res) => res.json())
-      .then((json: EventsData) => setData(json))
-      .catch((err) => console.error("Failed to load events:", err));
+    let cancelled = false;
+    loadEvents()
+      .then(({ events }) => {
+        if (!cancelled) setEvents(events);
+      })
+      .catch((err) => {
+        console.error("Could not load events from either source:", err);
+        if (!cancelled) setEvents([]);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  if (!data) {
+  if (events === null) {
     return (
       <div className="events_page">
         <NavBar />
@@ -99,10 +81,15 @@ export default function EventsPage() {
     );
   }
 
-  /* Current event first, then the two generic filler slides */
-  const slides: Slide[] = [toSlide(data.current), ...GENERIC_SLIDES];
+  const { upcoming, past } = splitByDate(events);
 
-  const events = tab === "upcoming" ? data.upcoming : data.past;
+  /* The featured event leads the carousel when there is one. Previously this
+     assumed one always existed and crashed the whole page when it did not —
+     which is a realistic state now that events are managed by hand. */
+  const featured = events.find((e) => e.isFeatured);
+  const slides: Slide[] = featured ? [toSlide(featured), ...GENERIC_SLIDES] : GENERIC_SLIDES;
+
+  const shown = tab === "upcoming" ? upcoming : past;
 
   return (
     <div className="events_page">
@@ -119,31 +106,39 @@ export default function EventsPage() {
                 className={`events_tab ${tab === "upcoming" ? "events_tab_active" : ""}`}
                 onClick={() => setTab("upcoming")}
               >
-                Upcoming ({data.upcoming.length})
+                Upcoming ({upcoming.length})
               </button>
               <button
                 className={`events_tab ${tab === "past" ? "events_tab_active" : ""}`}
                 onClick={() => setTab("past")}
               >
-                Past ({data.past.length})
+                Past ({past.length})
               </button>
             </div>
           </div>
 
-          <div className="events_grid">
-            {events.map((ev) => (
-              <EventCard
-                key={ev.id}
-                tag={ev.tag}
-                title={ev.title}
-                date={ev.date}
-                time={ev.time}
-                location={ev.location}
-                image={ev.image}
-                link={ev.link}
-              />
-            ))}
-          </div>
+          {shown.length === 0 ? (
+            <p className="events_empty">
+              {tab === "upcoming"
+                ? "Nothing coming up just yet — check back soon, or follow us on Instagram for the first word."
+                : "No past events to show."}
+            </p>
+          ) : (
+            <div className="events_grid">
+              {shown.map((ev) => (
+                <EventCard
+                  key={ev.id}
+                  tag={ev.tag}
+                  title={ev.title}
+                  date={ev.startsAt ? formatEventDay(ev.startsAt) : ""}
+                  time={ev.startsAt ? formatEventTime(ev.startsAt) : ""}
+                  location={ev.location}
+                  image={ev.image}
+                  link={ev.link}
+                />
+              ))}
+            </div>
+          )}
         </MaxWidth>
       </section>
 

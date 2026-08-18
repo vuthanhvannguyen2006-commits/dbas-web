@@ -5,7 +5,8 @@ import Image from "next/image";
 import { ArrowRight, BarChart3, BriefcaseBusiness, Network, Target } from "lucide-react";
 import NavBar from "@/components/nav-bar/nav-bar";
 import Footer from "@/components/footer/footer";
-import TeamSection, { type TeamMember } from "@/components/team-section/team-section";
+import { type TeamMember } from "@/components/team-section/team-section";
+import TeamSectionLive from "@/components/team-section/team-section-live";
 
 const joinUrl =
   "https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas";
@@ -33,8 +34,10 @@ const pillars = [
   },
 ];
 
-// Team content lives in /public/team.json instead of hardcoded in
-// this file, so updates don't require touching component code.
+// Read at build time and used as the starting content, so the page is never
+// blank while the database is being queried and the members are present in the
+// HTML. The live list replaces it client-side. The weekly job in Phase 8 keeps
+// this file in step with the database so it never drifts far.
 function getTeamMembers(): TeamMember[] {
   const filePath = path.join(process.cwd(), "public", "data", "team.json");
   const raw = fs.readFileSync(filePath, "utf-8");
@@ -149,7 +152,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <TeamSection members={team} />
+      {/* The build-time list renders first, then live data replaces it once
+          the database answers. See team-section-live.tsx. */}
+      <TeamSectionLive fallback={team} />
 
       <section className="about-cta">
         <div className="about-shell">

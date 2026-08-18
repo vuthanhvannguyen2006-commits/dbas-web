@@ -3,7 +3,9 @@ import { useState } from "react";
 import styles from "./carousel.module.css";
 
 export type Slide = {
-  id: number;
+  /* Widened from number: database ids are UUIDs. Only ever used as a React
+     key, so nothing else is affected. */
+  id: string | number;
   image: string;
   imageAlt?: string;
   tag?: string;
