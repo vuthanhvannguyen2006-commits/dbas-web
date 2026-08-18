@@ -754,3 +754,23 @@
     flex-wrap: wrap;
   }
 }
+
+/* LinkedIn icon beside a member's role in the modal. Only rendered when the
+   member has a URL, so members without one are unaffected. */
+.about-modalLinkedIn {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-left: 10px;
+  vertical-align: middle;
+  border-radius: 6px;
+  border: 1px solid var(--about-gold-deep);
+  color: var(--about-gold);
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.about-modalLinkedIn:hover {
+  background: rgba(231, 200, 76, 0.14);
+}

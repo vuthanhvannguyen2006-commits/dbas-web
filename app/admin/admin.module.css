@@ -607,3 +607,49 @@
     min-height: 40px;
   }
 }
+
+/* ---------- Reorder controls ---------- */
+
+.move_group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.move_button {
+  width: 30px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 1px solid rgba(231, 200, 76, 0.3);
+  background: transparent;
+  color: var(--dbas-gold);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.move_button:hover:not(:disabled) {
+  background: rgba(231, 200, 76, 0.12);
+}
+
+.move_button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 700px) {
+  .move_group {
+    flex-direction: row;
+  }
+  .move_button {
+    width: 44px;
+    height: 40px;
+  }
+}
+
+.danger_button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}

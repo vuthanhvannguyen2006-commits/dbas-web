@@ -13,6 +13,9 @@ export type TeamMember = {
   image: string;
   bio: string;
   tags: string[];
+  /* Optional and additive: members imported before this existed simply do not
+     have one, and the icon is skipped for them. */
+  linkedin?: string | null;
 };
 
 export default function TeamSection({ members }: { members: TeamMember[] }) {
@@ -111,7 +114,20 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
 
             <div className="about-modalBody">
               <h3>{active.name}</h3>
-              <p className="about-modalRole">{active.role}</p>
+              <p className="about-modalRole">
+                {active.role}
+                {active.linkedin && (
+                  <a
+                    className="about-modalLinkedIn"
+                    href={active.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${active.name} on LinkedIn`}
+                  >
+                    <FaLinkedinIn />
+                  </a>
+                )}
+              </p>
               <p className="about-modalBio">{active.bio}</p>
 
               <p className="about-modalTagsLabel">Interests</p>

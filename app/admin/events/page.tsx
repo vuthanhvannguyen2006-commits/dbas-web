@@ -63,6 +63,8 @@ export default function AdminEventsPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  // Without this a fast double-click fires two deletes for the same row.
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   // Bumping this re-runs the fetch. The `cancelled` flag means a slow response
   // from an earlier load cannot land after a newer one and show stale rows.
@@ -159,8 +161,10 @@ export default function AdminEventsPage() {
   }
 
   async function remove(id: string) {
-    if (!supabase) return;
+    if (!supabase || deleting) return;
+    setDeleting(id);
     const { error } = await supabase.from("events").delete().eq("id", id);
+    setDeleting(null);
     setConfirmDelete(null);
     if (error) {
       setLoadError(error.message);
@@ -328,8 +332,12 @@ export default function AdminEventsPage() {
         {confirmDelete === e.id ? (
           <>
             <span className={styles.confirm_text}>Delete this event?</span>
-            <button className={styles.danger_button} onClick={() => remove(e.id)}>
-              Yes, delete
+            <button
+              className={styles.danger_button}
+              onClick={() => remove(e.id)}
+              disabled={deleting === e.id}
+            >
+              {deleting === e.id ? "Deleting…" : "Yes, delete"}
             </button>
             <button className={styles.ghost_button} onClick={() => setConfirmDelete(null)}>
               Keep
