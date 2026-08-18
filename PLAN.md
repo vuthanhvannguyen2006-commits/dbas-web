@@ -490,7 +490,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Extend the `TeamMember` type at `components/team-section/team-section.tsx:9-16` with an optional `linkedin?: string` and render the already-imported `FaLinkedinIn` when it is present. This is additive — members without one are unaffected.
       Covers: R5, R13, R14
 
-- [ ] **Phase 6: Image upload**
+- [x] **Phase 6: Image upload**
       Done when: an image chosen in either form uploads to Storage, its URL is saved, and it renders publicly; an oversized file is refused with a message naming the 5 MB limit; a legacy record still renders.
       Steps:
       - Upload helper writing to `media` at `events/<uuid>.<ext>` and `team/<slug>.<ext>`; enforce 5 MB and image MIME types in the UI as well as the bucket.

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import ImageField from "@/components/admin/image-field";
 import type { TeamMemberRow } from "@/lib/types";
 import { useAdminSession } from "@/components/admin/admin-session";
 import styles from "../admin.module.css";
@@ -283,25 +284,22 @@ export default function AdminTeamPage() {
             <small className={styles.hint}>Separate with commas.</small>
           </label>
 
-          <div className={styles.field_row}>
-            <label className={styles.field}>
-              <span>Photo path or URL</span>
-              <input
-                value={draft.imageUrl}
-                onChange={(e) => set("imageUrl", e.target.value)}
-                placeholder="/member-images/name.png"
-              />
-            </label>
+          <ImageField
+            label="Photo"
+            value={draft.imageUrl}
+            onChange={(v) => set("imageUrl", v)}
+            folder="team"
+            baseName={draft.slug}
+          />
 
-            <label className={styles.field}>
-              <span>LinkedIn URL</span>
-              <input
-                value={draft.linkedinUrl}
-                onChange={(e) => set("linkedinUrl", e.target.value)}
-                placeholder="https://linkedin.com/in/…"
-              />
-            </label>
-          </div>
+          <label className={styles.field}>
+            <span>LinkedIn URL</span>
+            <input
+              value={draft.linkedinUrl}
+              onChange={(e) => set("linkedinUrl", e.target.value)}
+              placeholder="https://linkedin.com/in/…"
+            />
+          </label>
 
           <div className={styles.toggle_row}>
             <label className={styles.toggle}>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import ImageField from "@/components/admin/image-field";
 import { EVENT_TAGS, type EventRow } from "@/lib/types";
 import {
   formatEventDate,
@@ -250,18 +251,12 @@ export default function AdminEventsPage() {
             </label>
           </div>
 
-          <label className={styles.field}>
-            <span>Image path or URL</span>
-            <input
-              value={draft.imageUrl}
-              onChange={(e) => set("imageUrl", e.target.value)}
-              placeholder="/social.jpeg"
-            />
-            <small className={styles.hint}>
-              Uploading a file comes in the next step. For now, use a path to an
-              image already in the site, like <code>/social.jpeg</code>.
-            </small>
-          </label>
+          <ImageField
+            label="Event image"
+            value={draft.imageUrl}
+            onChange={(v) => set("imageUrl", v)}
+            folder="events"
+          />
 
           <div className={styles.toggle_row}>
             <label className={styles.toggle}>
