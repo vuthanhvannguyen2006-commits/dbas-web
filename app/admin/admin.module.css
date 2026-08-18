@@ -1,0 +1,340 @@
+/* Admin dashboard — reuses the site's brand tokens from globals.css so this
+   reads as part of DBAS rather than a bolted-on control panel. */
+
+/* ---------- Sign-in ---------- */
+
+.sign_in_screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--content-padding);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(231, 200, 76, 0.09), transparent 60%),
+    var(--dbas-ink);
+}
+
+.sign_in_card {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 36px 32px;
+  border-radius: 18px;
+  border: 1px solid rgba(231, 200, 76, 0.22);
+  background: linear-gradient(145deg, #211a15, #18120e);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.sign_in_logo {
+  align-self: center;
+  object-fit: contain;
+}
+
+.sign_in_heading {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--dbas-cream);
+  margin: 0;
+}
+
+.sign_in_sub {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #aaa198;
+}
+
+.sign_in_note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #8a8279;
+}
+
+/* ---------- Form fields ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.field span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #aaa198;
+}
+
+.field input {
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(231, 200, 76, 0.22);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--dbas-cream);
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.field input:focus {
+  outline: 2px solid var(--dbas-gold-deep);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.error {
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(220, 90, 76, 0.4);
+  background: rgba(220, 90, 76, 0.12);
+  color: #f0b6ae;
+  font-size: 13px;
+  text-align: left;
+}
+
+/* ---------- Buttons ---------- */
+
+.primary_button {
+  margin-top: 4px;
+  padding: 11px 18px;
+  border: 1px solid var(--dbas-gold);
+  border-radius: 10px;
+  background: var(--dbas-gold);
+  color: #131e25;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.primary_button:hover:not(:disabled) {
+  transform: scale(1.03);
+  background-color: #bf8b48;
+  box-shadow: 0 0 6px #bf8b48, 0 0 22px rgba(191, 139, 72, 0.55);
+}
+
+.primary_button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.ghost_button {
+  padding: 7px 13px;
+  border-radius: 9px;
+  border: 1px solid rgba(231, 200, 76, 0.35);
+  background: transparent;
+  color: var(--dbas-gold);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ghost_button:hover {
+  background: rgba(231, 200, 76, 0.1);
+}
+
+/* ---------- Shell ---------- */
+
+.shell {
+  min-height: 100vh;
+  background: var(--dbas-ink);
+}
+
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--dbas-ink);
+  color: #aaa198;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(13, 9, 5, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(231, 200, 76, 0.14);
+}
+
+.header_inner {
+  width: var(--content-max-width);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+  min-height: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 21px;
+  color: var(--dbas-cream);
+}
+
+.accent {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--dbas-gold);
+  text-shadow: 1px 1px 2px #bf8b48;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.tab,
+.tab_active {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab {
+  color: #cfc7be;
+}
+
+.tab:hover {
+  background: rgba(231, 200, 76, 0.1);
+  color: var(--dbas-gold);
+}
+
+.tab_active {
+  background: rgba(231, 200, 76, 0.16);
+  color: var(--dbas-gold);
+  font-weight: 700;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.role_pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(231, 200, 76, 0.4);
+  color: var(--dbas-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.email {
+  font-size: 13px;
+  color: #aaa198;
+}
+
+.main {
+  width: var(--content-max-width);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px var(--content-padding) 80px;
+}
+
+/* ---------- Page content ---------- */
+
+.page_heading {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 500;
+  color: var(--dbas-cream);
+  margin: 0 0 10px;
+}
+
+.page_sub {
+  margin: 0 0 32px;
+  max-width: 60ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #aaa198;
+}
+
+.card_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  display: block;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(231, 200, 76, 0.18);
+  background: linear-gradient(145deg, #211a15, #18120e);
+  color: var(--dbas-cream);
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(231, 200, 76, 0.5);
+  transform: translateY(-3px);
+}
+
+.card h2 {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.card p {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #aaa198;
+}
+
+.card_cta {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dbas-gold);
+}
+
+.card_locked {
+  opacity: 0.55;
+}
+
+.card_locked:hover {
+  border-color: rgba(231, 200, 76, 0.18);
+  transform: none;
+}
+
+.placeholder {
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px dashed rgba(231, 200, 76, 0.28);
+  background: rgba(0, 0, 0, 0.18);
+  color: #aaa198;
+  text-align: center;
+}
+
+.placeholder p {
+  margin: 0;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .header_inner {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .email {
+    display: none;
+  }
+}
