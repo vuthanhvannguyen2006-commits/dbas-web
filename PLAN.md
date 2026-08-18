@@ -482,7 +482,7 @@ Nine phases, numbered 0–8. Phase 0 is performed by the user, not the executor.
       - Verify R6 by hand — set an event to a past date and observe the grouping. There is no test framework in this project (verified), so this is an observation, not an automated test.
       Covers: R4, R6, R7, R13, R14; checks: A6
 
-- [ ] **Phase 5: Team section — create, edit, delete, reorder**
+- [x] **Phase 5: Team section — create, edit, delete, reorder**
       Done when: the same operations work for team members, `sort_order` controls display order, an editor account cannot reach the section, and a member with a LinkedIn URL renders the icon on `/about`.
       Steps:
       - List view ordered by `sort_order`, with move-up and move-down controls.
