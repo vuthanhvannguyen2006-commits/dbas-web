@@ -74,8 +74,13 @@
   border: 1px solid rgba(231, 200, 76, 0.22);
   background: rgba(0, 0, 0, 0.28);
   color: var(--dbas-cream);
-  font-size: 15px;
+  /* 16px is not a style choice. iOS Safari zooms the whole page in whenever a
+     focused input is smaller than this, which leaves the user zoomed and
+     scrolled sideways after every tap. Keep it at 16px or above. */
+  font-size: 16px;
   font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .field input:focus {
@@ -329,12 +334,69 @@
   font-size: 14px;
 }
 
-@media (max-width: 640px) {
+/* ---------- Mobile ---------- */
+
+@media (max-width: 700px) {
+  /* Two rows instead of a cramped single line: identity and account controls
+     on top, the section tabs across the full width beneath. Done with flex
+     order so the markup stays the same on every screen size. */
   .header_inner {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    row-gap: 10px;
   }
+
+  .brand {
+    order: 1;
+    font-size: 19px;
+  }
+
+  .account {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .tabs {
+    order: 3;
+    flex: 0 0 100%;
+    overflow-x: auto;
+    /* Tabs must never wrap onto two lines — they scroll sideways instead. */
+    flex-wrap: nowrap;
+  }
+
+  .tab,
+  .tab_active {
+    white-space: nowrap;
+    /* Comfortable thumb target rather than a 32px sliver. */
+    padding: 10px 15px;
+  }
+
+  /* The address is the least useful thing here and the first to go; the role
+     badge stays, because knowing whether you are admin or editor explains why
+     the Team tab is or is not there. */
   .email {
     display: none;
+  }
+
+  .main {
+    padding: 28px var(--content-padding) 64px;
+  }
+
+  .page_sub {
+    margin-bottom: 24px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  /* Lifting on hover is meaningless on a touch screen and can leave a card
+     stuck in its hovered state after a tap. */
+  .card:hover {
+    transform: none;
+  }
+
+  .sign_in_card {
+    padding: 30px 22px;
   }
 }
