@@ -146,6 +146,17 @@ variables → Actions → Variables → `NEXT_PUBLIC_SUPABASE_URL` and
 
 You can run it by hand any time from the Actions tab.
 
+**It only runs from the default branch.** GitHub reads `schedule:` triggers,
+and offers the manual Run button, only from a repository's default branch —
+`main` here. On any other branch the file sits there looking correct and never
+runs once. If you move this work to another repository, it is not live until
+it is merged to that repository's default branch.
+
+**It needs Node 22 or newer.** The Supabase client builds a realtime connection
+the moment it is created, whether or not anything uses realtime, and that needs
+a `WebSocket` that Node only gained in 22. On Node 20 the job fails on its first
+line. The same applies to running `node scripts/export-content.mjs` by hand.
+
 ---
 
 ## Backups — read this before you need it
@@ -183,9 +194,12 @@ Then commit the result. That is a restore point.
 ## Backing out entirely
 
 If this ever needs to be undone, the old way still works. The public pages read
-the database first and the JSON files second, so reverting the commits on this
-branch returns the site to reading the JSON files with no database involved.
-Nothing in this project deletes those files.
+the database first and the JSON files second, so reverting returns the site to
+reading the JSON files with no database involved. Nothing in this project
+deletes those files.
+
+All of it arrived on `main` as one merge commit, so backing it out is a single
+`git revert -m 1 <that commit>` rather than unpicking twenty.
 
 ---
 
@@ -199,6 +213,13 @@ Nothing in this project deletes those files.
 | `lib/content.ts` | Loading content, and the fallback logic |
 | `scripts/export-content.mjs` | Writes the JSON safety net from the database |
 | `public/data/*.json` | The safety net itself |
+
+One other workflow, `.github/workflows/nextjs.yml`, is a leftover GitHub Pages
+deploy inherited from the original repository. It is **disabled** under the
+Actions tab, because it is not how this site deploys and it fails on every
+push to `main` if left on. The file was kept rather than deleted so this
+repository stays otherwise identical to the one it was forked from. If you
+re-enable it by accident, disable it again — it deploys nothing anyone uses.
 
 The migrations are worth reading in order if you need to understand the
 security rules. `0001` sets them up and explains the reasoning; `0003` explains
