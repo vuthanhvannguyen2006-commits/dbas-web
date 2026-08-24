@@ -28,13 +28,57 @@ body {
 :root {
   --content-max-width: clamp(320px, 90vw, 1600px);
   --content-padding: clamp(1rem, 3vw, 2rem);
+
+  /* Brand palette. These values already existed but were scoped to
+     .about-page, so nothing outside the About page could reach them. Promoted
+     here unchanged; the .about-page declarations are left in place so that
+     page renders exactly as before. */
+  --dbas-gold: #e7c84c;
+  --dbas-gold-deep: #c99537;
+  --dbas-ink: #110d0a;
+  --dbas-cream: #f4efe7;
+
+  /* body already referenced these two, but nothing ever defined them. */
+  --background: #1a1512;
+  --foreground: #f2eee7;
+}
+
+/* Scrollbars, site-wide. Firefox takes the two-value shorthand; Chrome, Edge
+   and Safari need the ::-webkit- rules below. Both are needed for full
+   coverage. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dbas-gold-deep) var(--dbas-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dbas-ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--dbas-gold), var(--dbas-gold-deep));
+  border: 2px solid var(--dbas-ink);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dbas-gold);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--dbas-ink);
 }
 
 /* Text Formats */
 
 /* Section Headings */
 .heading_on_white {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-playfair), "Playfair Display", serif;
   font-size: clamp(24px, 8vw, 52px);
   font-weight: 500;
   color: #1f212b;
@@ -44,7 +88,7 @@ body {
   white-space: nowrap;
 }
 .heading_on_black {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-playfair), "Playfair Display", serif;
   font-size: clamp(24px, 8vw, 52px);
   font-weight: 500;
   color: #f8efe4;

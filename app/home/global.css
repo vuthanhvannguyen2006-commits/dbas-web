@@ -28,7 +28,7 @@ body {
 .about_left h1 {
   display: inline-block;
   width: fit-content;
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-family: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0.5px;

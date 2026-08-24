@@ -188,3 +188,16 @@
     align-items: flex-start;
   }
 }
+/* Shown when a tab has no events. Without this the section is an empty gap
+   that reads as a broken page rather than an intentional state. */
+.events_empty {
+  margin: 0;
+  padding: 44px 24px;
+  text-align: center;
+  font-size: clamp(14px, 3vw, 16px);
+  line-height: 1.6;
+  color: #aaa198;
+  border: 1px dashed rgba(231, 200, 76, 0.28);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.18);
+}

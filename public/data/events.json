@@ -1,60 +1,70 @@
 {
-    "current": {
+  "current": {
+    "id": 1,
+    "tag": "Social",
+    "title": "Alumni Connect",
+    "date": "26 August 2026",
+    "time": "5:30 PM",
+    "location": "📍 LC Building, Deakin University, Burwood Campus",
+    "image": "https://tqdlzrtepwdssgzjpngk.supabase.co/storage/v1/object/public/media/events/b9cdb23c-f3b1-4be9-a2d1-b2dd8c8a8d4c-1787040803430.png",
+    "link": "https://campus.hellorubric.com/?eid=70917",
+    "cta": "Register Now"
+  },
+  "upcoming": [
+    {
       "id": 1,
       "tag": "Social",
-      "title": "Connect & Catch Up",      
-      "description": "Connect face-to-face with business and analytics enthusiasts. Get ready to make new friends, play fun games, and enjoy FREE food and drinks!",      
+      "title": "Alumni Connect",
+      "date": "26 August 2026",
+      "time": "5:30 PM",
+      "location": "📍 LC Building, Deakin University, Burwood Campus",
+      "image": "https://tqdlzrtepwdssgzjpngk.supabase.co/storage/v1/object/public/media/events/b9cdb23c-f3b1-4be9-a2d1-b2dd8c8a8d4c-1787040803430.png",
+      "link": "https://campus.hellorubric.com/?eid=70917",
+      "cta": "Register Now"
+    }
+  ],
+  "past": [
+    {
+      "id": 1,
+      "tag": "Social",
+      "title": "Connect & Catch Up",
       "date": "21 July 2026",
       "time": "6:00 PM",
       "location": "Building LC, Deakin Burwood",
       "image": "/social.jpeg",
-      "cta": "Register Now",
-      "link": "https://campus.hellorubric.com/?eid=67413&utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnTEsDQBxjmZXjFDbP7ZyvgAdSRl049RJhOykrpwzNNmW6C39rdk_7Pkf_e0c_aem_Ty5Jr-0vaa8z0h4wGnoUGQ"    },
-    "upcoming": [
-      {
-        "id": 1,
-        "tag": "Social",
-        "title": "Connect & Catch Up",      
-        "description": "Connect face-to-face with business and analytics enthusiasts. Get ready to make new friends, play fun games, and enjoy FREE food and drinks!",      
-        "date": "21 July 2026",
-        "time": "6:00 PM",
-        "location": "Building LC, Deakin Burwood",
-        "image": "/social.jpeg",
-        "cta": "Register Now",
-        "link": "https://campus.hellorubric.com/?eid=67413&utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnTEsDQBxjmZXjFDbP7ZyvgAdSRl049RJhOykrpwzNNmW6C39rdk_7Pkf_e0c_aem_Ty5Jr-0vaa8z0h4wGnoUGQ"    
-      }
-
-    ],
-    "past": [
-      {
-        "id": 5,
-        "tag": "Social",
-        "title": "T1 2026 End-of-Trimester Party",
-        "date": "12 June 2026",
-        "time": "07:00 PM",
-        "location": "Burwood Campus",
-        "image": "events/party.png",
-        "link": "https://www.instagram.com/p/DYT6AMGxX4j/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-      },
-      {
-        "id": 6,
-        "tag": "Workshop",
-        "title": "Finance and Investment Essentials Seminar",
-        "date": "05 May 2026",
-        "time": "06:00 PM",
-        "location": "Room LC5.107, Deakin Burwood",
-        "image": "events/finance-seminar.png",
-        "link": "https://www.instagram.com/p/DXRQjR2jFzb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-      },
-      {
-        "id": 7,
-        "tag": "Social",
-        "title": "Meet & Mingle",
-        "date": "25 March 2026",
-        "time": "06:00 PM",
-        "location": "Deakin Burwood",
-        "image": "events/meet-and-mingle.png",
-        "link": "https://www.instagram.com/p/DVvPNfNkuTL/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-      }
-    ]
-  }
+      "link": "https://campus.hellorubric.com/?eid=67413&utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnTEsDQBxjmZXjFDbP7ZyvgAdSRl049RJhOykrpwzNNmW6C39rdk_7Pkf_e0c_aem_Ty5Jr-0vaa8z0h4wGnoUGQ",
+      "description": "Connect face-to-face with business and analytics enthusiasts. Get ready to make new friends, play fun games, and enjoy FREE food and drinks!",
+      "cta": "Register Now"
+    },
+    {
+      "id": 2,
+      "tag": "Social",
+      "title": "T1 2026 End-of-Trimester Party",
+      "date": "12 June 2026",
+      "time": "7:00 PM",
+      "location": "Burwood Campus",
+      "image": "events/party.png",
+      "link": "https://www.instagram.com/p/DYT6AMGxX4j/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+    },
+    {
+      "id": 3,
+      "tag": "Workshop",
+      "title": "Finance and Investment Essentials Seminar",
+      "date": "5 May 2026",
+      "time": "6:00 PM",
+      "location": "Room LC5.107, Deakin Burwood",
+      "image": "events/finance-seminar.png",
+      "link": "https://www.instagram.com/p/DXRQjR2jFzb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+    },
+    {
+      "id": 4,
+      "tag": "Social",
+      "title": "Meet & Mingle",
+      "date": "25 March 2026",
+      "time": "6:00 PM",
+      "location": "Deakin Burwood",
+      "image": "events/meet-and-mingle.png",
+      "link": "https://www.instagram.com/p/DVvPNfNkuTL/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+    }
+  ]
+}
