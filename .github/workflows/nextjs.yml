@@ -1,3 +1,13 @@
+# ⚠️ THIS WORKFLOW IS NOT THE LIVE DEPLOY PATH.
+#
+# The site is served from Vercel (deakinbas.vercel.app), which deploys straight
+# from this repository and ignores everything in this file. This is a leftover
+# GitHub Pages setup.
+#
+# It is misleading in a specific way: it configures a static export, which the
+# site is not, and it led a first pass at this project to design around
+# constraints that do not apply. If you are not using GitHub Pages, delete it.
+#
 # Sample workflow for building and deploying a Next.js site to GitHub Pages
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started

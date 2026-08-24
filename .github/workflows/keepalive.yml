@@ -1,0 +1,81 @@
+# Keeps the site's data healthy, and keeps itself alive.
+#
+# Three problems, one job:
+#
+#  1. Supabase pauses free projects after a week of inactivity. Reading the
+#     database counts as activity, so this stops the project idling out over a
+#     quiet break — which would otherwise leave the site serving stale content.
+#
+#  2. The JSON files under public/data are the fallback the site uses when the
+#     database is unreachable, and app/events/page.tsx reads events.json at
+#     build time. Rewriting them from the live database stops them drifting.
+#
+#  3. GitHub disables scheduled workflows in a repository with no activity for
+#     60 days. Committing the refreshed JSON is that activity, so this workflow
+#     keeps its own schedule alive.
+#
+# NOTE FOR FORKS: GitHub disables scheduled workflows on forked repositories by
+# default. If you forked this repo, enable it by hand under the Actions tab, or
+# nothing here runs.
+#
+# Setup: add two repository *variables* (Settings -> Secrets and variables ->
+# Actions -> Variables). Not secrets — both values are public by design and
+# already ship inside the website's JavaScript:
+#
+#   NEXT_PUBLIC_SUPABASE_URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+name: Refresh content and keep Supabase awake
+
+on:
+  schedule:
+    # 19:00 UTC Sunday — early Monday in Melbourne. Comfortably inside the
+    # one-week pause window even if a run is skipped.
+    - cron: "0 19 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 22, not 20. @supabase/supabase-js builds a realtime client inside
+      # createClient() whether or not you use realtime, and that needs a global
+      # WebSocket. Node gained one in 22; on 20 the very first createClient()
+      # throws "native WebSocket not found" and this job dies before it reads
+      # anything. It passes locally on Node 24, so this only ever shows up here.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export content from Supabase
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: node scripts/export-content.mjs
+
+      - name: Commit if anything changed
+        run: |
+          if [ -z "$(git status --porcelain public/data)" ]; then
+            echo "No content changes. The database read still counted as activity."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data
+          git commit -m "Refresh public/data from the database"
+          git push
