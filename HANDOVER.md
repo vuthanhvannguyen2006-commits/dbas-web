@@ -25,9 +25,16 @@ one person.**
 
 | Account | What it holds | What breaks without it |
 |---|---|---|
-| **GitHub** — the repository | All the code | No one can change or deploy the site |
+| **GitHub** — repository `minhducxD/dbas-web` (private) | All the code | No one can change or deploy the site |
 | **Supabase** — project `tqdlzrtepwdssgzjpngk`, region Sydney | Every event and committee member, and everyone's login | Events and the team page fall back to whatever was last saved to the JSON files, and nobody can sign in to `/admin` |
-| **Vercel** — the project serving the live site | The deployment | The site goes offline |
+| **Vercel** — project `dbas-web`, team `dbas1` | The deployment, live at **https://dbas-web-tau.vercel.app** | The site goes offline |
+
+The live address is `dbas-web-tau.vercel.app`. Vercel also answers on
+`dbas-web-dbas1.vercel.app`, which is an internal alias sitting behind Vercel's
+own login — if you test that one you will be bounced to a Vercel sign-in page
+and conclude the site is broken when it is fine. When in doubt, the production
+URL is the one `vercel project ls` prints, not the one the naming pattern
+suggests.
 
 > **This has already happened once.** An earlier Vercel deployment
 > (`dbas-web-phi.vercel.app`) returns "deployment not found" because the
