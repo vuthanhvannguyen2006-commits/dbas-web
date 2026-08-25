@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { resolveImageUrl } from "@/lib/storage";
 import type { CarouselFit } from "@/lib/content";
 import styles from "@/app/admin/admin.module.css";
@@ -49,6 +49,11 @@ export default function CarouselFraming({
   onChange,
 }: Props) {
   const [shape, setShape] = useState<"desktop" | "mobile">("desktop");
+  const [dragging, setDragging] = useState(false);
+  /* Which contact owns the drag. A ref rather than state because the pointer
+     handlers must gate on it immediately, within the same event — not after a
+     render. `dragging` exists only to drive the cursor. */
+  const activePointer = useRef<number | null>(null);
   const src = resolveImageUrl(imageUrl);
 
   // Nothing to frame yet. Showing an empty box here would imply the controls
@@ -57,13 +62,65 @@ export default function CarouselFraming({
 
   const isMobile = shape === "mobile";
 
-  function pick(e: React.MouseEvent<HTMLDivElement>) {
+  /* Pointer events rather than mouse events, so one code path covers mouse,
+     trackpad, touch and pen. A tap is just a drag of zero distance, which is
+     why there is no separate click handler — having both would fire twice for
+     every press. */
+  function moveTo(e: React.PointerEvent<HTMLDivElement>) {
     const box = e.currentTarget.getBoundingClientRect();
     onChange({
       focalX: clamp(((e.clientX - box.left) / box.width) * 100),
       focalY: clamp(((e.clientY - box.top) / box.height) * 100),
       fit,
     });
+  }
+
+  function startDrag(e: React.PointerEvent<HTMLDivElement>) {
+    // Right-click belongs to the context menu, not to repositioning.
+    if (e.button !== 0) return;
+    /* One contact owns the drag at a time. `button` is 0 for every touch
+       contact, not just the first, so without this a second finger landing
+       mid-drag takes over — and its release then ends the drag while the
+       original finger is still down, leaving the picture unresponsive until
+       the user lifts and starts again. Verified by replaying that exact
+       sequence, so it is a real defect rather than a theoretical one. */
+    if (activePointer.current !== null) return;
+
+    activePointer.current = e.pointerId;
+    setDragging(true);
+
+    /* Capture routes later events for this pointer back here even once the
+       cursor leaves, so dragging past the edge keeps tracking and pins to the
+       clamped edge. It can throw if the pointer is already gone by the time we
+       ask, which must not abort the drag we have just registered — hence after
+       the bookkeeping, and guarded. Note capture does NOT guarantee a pointerup:
+       lostpointercapture can arrive on its own, which is why that is handled
+       below too. */
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* Nothing to do — the drag still works from the events we receive. */
+    }
+
+    moveTo(e);
+  }
+
+  function drag(e: React.PointerEvent<HTMLDivElement>) {
+    if (activePointer.current !== e.pointerId) return;
+    moveTo(e);
+  }
+
+  function endDrag(e: React.PointerEvent<HTMLDivElement>) {
+    if (activePointer.current !== e.pointerId) return;
+    activePointer.current = null;
+    setDragging(false);
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      }
+    } catch {
+      /* Already released by the browser. */
+    }
   }
 
   return (
@@ -95,19 +152,28 @@ export default function CarouselFraming({
           because it looks authoritative while being wrong. */}
       <div
         className={styles.framing_preview}
-        style={
-          isMobile
+        style={{
+          ...(isMobile
             ? { aspectRatio: "3 / 4", height: 420, width: "fit-content", maxWidth: "100%" }
-            : { aspectRatio: "8 / 3", height: "auto", width: "100%", maxWidth: 520 }
-        }
-        onClick={pick}
-        role="presentation"
-        title="Click the part of the picture that matters most"
+            : { aspectRatio: "8 / 3", height: "auto", width: "100%", maxWidth: 520 }),
+          cursor: dragging ? "grabbing" : "grab",
+        }}
+        onPointerDown={startDrag}
+        onPointerMove={drag}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onLostPointerCapture={endDrag}
+        aria-hidden="true"
+        title="Drag to choose the part of the picture that matters most"
       >
+        {/* draggable={false} because the browser's own image drag starts on
+            mousedown and swallows the pointer stream — without it the picture
+            ghosts away under the cursor and the framing stops following. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt=""
+          draggable={false}
           className={styles.framing_image}
           style={{ objectFit: fit, objectPosition: `${focalX}% ${focalY}%` }}
         />
@@ -133,9 +199,9 @@ export default function CarouselFraming({
       </div>
 
       <small className={styles.hint}>
-        Click the part of the picture that matters most — a face, a logo — and the
-        banner keeps it in view. Check both shapes: the text covers the right side
-        on a computer and the bottom on a phone.
+        Drag on the picture to choose the part that matters most — a face, a logo
+        — and the banner keeps it in view. Check both shapes: the text covers the
+        right side on a computer and the bottom on a phone.
       </small>
 
       <div className={styles.framing_sliders}>

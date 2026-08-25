@@ -755,8 +755,15 @@
   border-radius: 10px;
   border: 1px solid rgba(231, 200, 76, 0.22);
   background: var(--dbas-ink);
-  cursor: crosshair;
   user-select: none;
+  /* Without this a touch-drag is claimed by the page scroller before React ever
+     sees a pointermove, and the focal point cannot be dragged on a phone or a
+     touchscreen laptop at all. `pinch-zoom` rather than `none`: it disables the
+     one-finger pan that would fight the drag, while still letting someone
+     pinch to zoom — which matters more here than it might elsewhere, because
+     this is a picture people are being asked to look at closely. Cursor is set
+     inline instead, since it changes with drag state. */
+  touch-action: pinch-zoom;
 }
 
 .framing_image {
