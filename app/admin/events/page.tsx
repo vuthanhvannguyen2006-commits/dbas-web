@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ImageField from "@/components/admin/image-field";
+import CarouselFraming from "@/components/admin/carousel-framing";
 import { EVENT_TAGS, type EventRow } from "@/lib/types";
+import type { CarouselFit } from "@/lib/content";
 import {
   formatEventDate,
   isPast,
@@ -21,6 +23,9 @@ type Draft = {
   location: string;
   imageUrl: string;
   carouselImageUrl: string;
+  carouselFocalX: number;
+  carouselFocalY: number;
+  carouselFit: CarouselFit;
   cta: string;
   link: string;
   isFeatured: boolean;
@@ -35,6 +40,9 @@ const EMPTY: Draft = {
   location: "",
   imageUrl: "",
   carouselImageUrl: "",
+  carouselFocalX: 50,
+  carouselFocalY: 50,
+  carouselFit: "cover",
   cta: "",
   link: "",
   isFeatured: false,
@@ -50,6 +58,9 @@ function toDraft(e: EventRow): Draft {
     location: e.location ?? "",
     imageUrl: e.image_url ?? "",
     carouselImageUrl: e.carousel_image_url ?? "",
+    carouselFocalX: e.carousel_focal_x ?? 50,
+    carouselFocalY: e.carousel_focal_y ?? 50,
+    carouselFit: e.carousel_fit === "contain" ? "contain" : "cover",
     cta: e.cta ?? "",
     link: e.link ?? "",
     isFeatured: e.is_featured,
@@ -135,6 +146,9 @@ export default function AdminEventsPage() {
       location: draft.location.trim() || null,
       image_url: draft.imageUrl.trim() || null,
       carousel_image_url: draft.carouselImageUrl.trim() || null,
+      carousel_focal_x: draft.carouselFocalX,
+      carousel_focal_y: draft.carouselFocalY,
+      carousel_fit: draft.carouselFit,
       cta: draft.cta.trim() || null,
       link: draft.link.trim() || null,
       is_featured: draft.isFeatured,
@@ -276,6 +290,23 @@ export default function AdminEventsPage() {
             — the banner crops tall images top and bottom. Leave it empty to use
             the event image above.
           </small>
+
+          {/* Previews whichever picture the banner would really use, which is
+              the carousel one when set and the event one otherwise. */}
+          <CarouselFraming
+            imageUrl={draft.carouselImageUrl || draft.imageUrl}
+            focalX={draft.carouselFocalX}
+            focalY={draft.carouselFocalY}
+            fit={draft.carouselFit}
+            onChange={({ focalX, focalY, fit }) =>
+              setDraft((d) => ({
+                ...d,
+                carouselFocalX: focalX,
+                carouselFocalY: focalY,
+                carouselFit: fit,
+              }))
+            }
+          />
 
           <div className={styles.toggle_row}>
             <label className={styles.toggle}>

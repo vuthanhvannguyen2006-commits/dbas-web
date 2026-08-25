@@ -8,6 +8,12 @@ export type Slide = {
   id: string | number;
   image: string;
   imageAlt?: string;
+  /* Framing for this slide's picture. Both are composed by the caller from
+     already-validated values — this component does no checking of its own,
+     because they go straight into an inline style. Omitted for the generic
+     slides, which then fall back to what the stylesheet already does. */
+  imageFit?: "cover" | "contain";
+  imagePosition?: string;
   tag?: string;
   title: string;
   description?: string;
@@ -41,6 +47,10 @@ export default function Carousel({ slides }: Props) {
               src={slide.image}
               alt={slide.imageAlt ?? slide.title}
               className={styles.img}
+              style={{
+                objectFit: slide.imageFit ?? "cover",
+                objectPosition: slide.imagePosition ?? "center",
+              }}
             />
             <div className={styles.overlay} />
             <div className={styles.card}>

@@ -61,6 +61,13 @@ function toLegacyEvent(e, index) {
   // would think to attribute to an outage. Omitted when unset, like the two
   // above, so the JSON stays clean for the events that never set one.
   if (e.carousel_image_url) out.carouselImage = e.carousel_image_url;
+  // Framing too, or the banner snaps back to centre during an outage — the
+  // picture would still be right while sitting in the wrong place, which is
+  // harder to spot than it being wrong outright. Only written when it differs
+  // from the default, so the file stays readable for the usual case.
+  if (e.carousel_focal_x != null && e.carousel_focal_x !== 50) out.carouselFocalX = e.carousel_focal_x;
+  if (e.carousel_focal_y != null && e.carousel_focal_y !== 50) out.carouselFocalY = e.carousel_focal_y;
+  if (e.carousel_fit && e.carousel_fit !== "cover") out.carouselFit = e.carousel_fit;
   return out;
 }
 
