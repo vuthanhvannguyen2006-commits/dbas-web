@@ -46,8 +46,14 @@ function toSlide(ev: PublicEvent): Slide {
        never sets one behaves exactly as it did before this existed. */
     image: ev.carouselImage || ev.image,
     imageAlt: ev.title,
-    imageFit: ev.carouselFit,
-    imagePosition: `${ev.carouselFocalX}% ${ev.carouselFocalY}%`,
+    /* Always contain, never cover. cover trims the picture to the banner's
+       shape before the zoom and offset apply, so the trimmed edges are gone
+       for good — you would be dragging a fragment around and wondering where
+       the rest went. contain keeps the whole picture and lets zoom decide how
+       much of the banner it fills. */
+    imageFit: "contain",
+    imageOffsetX: ev.carouselOffsetX,
+    imageOffsetY: ev.carouselOffsetY,
     imageZoom: ev.carouselZoom / 100,
     tag: ev.tag,
     title: ev.title,

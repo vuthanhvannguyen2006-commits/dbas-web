@@ -13,8 +13,10 @@ export type Slide = {
      because they go straight into an inline style. Omitted for the generic
      slides, which then fall back to what the stylesheet already does. */
   imageFit?: "cover" | "contain";
-  imagePosition?: string;
-  /** Enlargement as a multiplier; 1 leaves the picture at its cover size. */
+  /** Shift from centre, as a percentage of the slide's own width and height. */
+  imageOffsetX?: number;
+  imageOffsetY?: number;
+  /** Size as a multiplier; 1 fills the slide, below 1 leaves the ground showing. */
   imageZoom?: number;
   tag?: string;
   title: string;
@@ -27,6 +29,19 @@ export type Slide = {
 type Props = {
   slides: Slide[];
 };
+
+/* Returns undefined rather than a no-op transform when nothing has been moved,
+   so an untouched slide renders with no transform at all — which is what the
+   two generic slides want, and what every event looked like before any of this
+   existed. Shared with the admin preview by being the same shape of string;
+   if this changes, the preview has to change with it or it stops previewing. */
+function transformFor(slide: Slide): string | undefined {
+  const x = slide.imageOffsetX ?? 0;
+  const y = slide.imageOffsetY ?? 0;
+  const zoom = slide.imageZoom ?? 1;
+  if (x === 0 && y === 0 && zoom === 1) return undefined;
+  return `translate(${x}%, ${y}%) scale(${zoom})`;
+}
 
 export default function Carousel({ slides }: Props) {
   const [current, setCurrent] = useState(0);
@@ -51,17 +66,17 @@ export default function Carousel({ slides }: Props) {
               className={styles.img}
               style={{
                 objectFit: slide.imageFit ?? "cover",
-                objectPosition: slide.imagePosition ?? "center",
-                /* Scaled about the same point the picture is anchored to, so
-                   zooming pulls in towards whatever was chosen rather than
-                   towards the middle and sliding it off. At zoom 1 this is an
-                   identity transform and changes nothing. The section clips
-                   the overflow, which is what makes the banner a window onto
-                   the picture rather than the whole of it. */
-                transform: slide.imageZoom && slide.imageZoom !== 1
-                  ? `scale(${slide.imageZoom})`
-                  : undefined,
-                transformOrigin: slide.imagePosition ?? "center",
+                /* Position comes from a transform rather than object-position,
+                   which is defined as a point *inside* the box and therefore
+                   clamps at the picture's own edges. A translate does not, so
+                   the picture can be pushed past the edge and sit smaller than
+                   the banner, with the section's ground showing behind it.
+
+                   Percentages in translate() resolve against this element's own
+                   border box — the slide — and not against the scale, so a drag
+                   of N pixels always moves the picture N pixels whatever the
+                   zoom. The section clips the overflow. */
+                transform: transformFor(slide),
               }}
             />
             <div className={styles.overlay} />

@@ -13,8 +13,8 @@ export type EventRow = {
   /* How that picture sits in the banner. Focal points are 0-100 and become
      object-position; fit is constrained to cover or contain by the database,
      because both are rendered into an inline style. */
-  carousel_focal_x: number;
-  carousel_focal_y: number;
+  carousel_offset_x: number;
+  carousel_offset_y: number;
   carousel_fit: string;
   carousel_zoom: number;
   cta: string | null;

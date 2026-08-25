@@ -65,9 +65,8 @@ function toLegacyEvent(e, index) {
   // picture would still be right while sitting in the wrong place, which is
   // harder to spot than it being wrong outright. Only written when it differs
   // from the default, so the file stays readable for the usual case.
-  if (e.carousel_focal_x != null && e.carousel_focal_x !== 50) out.carouselFocalX = e.carousel_focal_x;
-  if (e.carousel_focal_y != null && e.carousel_focal_y !== 50) out.carouselFocalY = e.carousel_focal_y;
-  if (e.carousel_fit && e.carousel_fit !== "cover") out.carouselFit = e.carousel_fit;
+  if (e.carousel_offset_x) out.carouselOffsetX = e.carousel_offset_x;
+  if (e.carousel_offset_y) out.carouselOffsetY = e.carousel_offset_y;
   if (e.carousel_zoom != null && e.carousel_zoom !== 100) out.carouselZoom = e.carousel_zoom;
   return out;
 }
