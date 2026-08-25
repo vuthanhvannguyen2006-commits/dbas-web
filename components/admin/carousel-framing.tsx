@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { resolveImageUrl } from "@/lib/storage";
-import type { CarouselFit } from "@/lib/content";
 import styles from "@/app/admin/admin.module.css";
 
 /* Choosing a picture for the banner is only half the job — the banner also
@@ -33,14 +32,8 @@ type Props = {
   imageUrl: string;
   offsetX: number;
   offsetY: number;
-  fit: CarouselFit;
   zoom: number;
-  onChange: (next: {
-    offsetX: number;
-    offsetY: number;
-    fit: CarouselFit;
-    zoom: number;
-  }) => void;
+  onChange: (next: { offsetX: number; offsetY: number; zoom: number }) => void;
 };
 
 /* Wide enough to push the picture right out of the banner, which is allowed —
@@ -54,7 +47,6 @@ export default function CarouselFraming({
   imageUrl,
   offsetX,
   offsetY,
-  fit,
   zoom,
   onChange,
 }: Props) {
@@ -91,7 +83,6 @@ export default function CarouselFraming({
     onChange({
       offsetX: clampOffset(start.fx + (dx / box.width) * 100),
       offsetY: clampOffset(start.fy + (dy / box.height) * 100),
-      fit,
       zoom,
     });
   }
@@ -205,7 +196,8 @@ export default function CarouselFraming({
           draggable={false}
           className={styles.framing_image}
           style={{
-            objectFit: fit,
+            /* contain, matching the banner: the whole picture, never trimmed. */
+            objectFit: "contain",
             /* Must compose exactly as carousel.tsx does — same order, same
                units — or this stops being a preview and starts being a
                plausible-looking lie. */
@@ -232,9 +224,11 @@ export default function CarouselFraming({
       </div>
 
       <small className={styles.hint}>
-        Size the picture first, then drag it around — the box shows only the part
-        that will appear. Check both shapes: the text covers the right side on a
-        computer and the bottom on a phone.
+        Size the picture, then drag it around. The box shows exactly what will
+        appear on the site. At 100% the whole picture fits inside the banner —
+        turn the size up until the dark edges disappear if you want it to fill.
+        Check both shapes: the text covers the right side on a computer and the
+        bottom on a phone.
       </small>
 
       <div className={styles.framing_sliders}>
@@ -247,33 +241,21 @@ export default function CarouselFraming({
             step={5}
             value={zoom}
             onChange={(e) =>
-              onChange({ offsetX, offsetY, fit, zoom: Number(e.target.value) })
+              onChange({ offsetX, offsetY, zoom: Number(e.target.value) })
             }
           />
         </label>
       </div>
 
       <div className={styles.framing_actions}>
-        <label className={styles.toggle}>
-          <input
-            type="checkbox"
-            checked={fit === "contain"}
-            onChange={(e) =>
-              onChange({
-                offsetX,
-                offsetY,
-                fit: e.target.checked ? "contain" : "cover",
-                zoom,
-              })
-            }
-          />
-          <span>Show the whole picture instead of filling the banner</span>
-        </label>
+        <span className={styles.hint}>
+          The whole picture is always kept — nothing is ever trimmed away.
+        </span>
 
         <button
           type="button"
           className={styles.ghost_button}
-          onClick={() => onChange({ offsetX: 0, offsetY: 0, fit: "cover", zoom: 100 })}
+          onClick={() => onChange({ offsetX: 0, offsetY: 0, zoom: 100 })}
         >
           Reset
         </button>

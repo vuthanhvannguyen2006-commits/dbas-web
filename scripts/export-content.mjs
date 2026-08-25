@@ -67,7 +67,6 @@ function toLegacyEvent(e, index) {
   // from the default, so the file stays readable for the usual case.
   if (e.carousel_offset_x) out.carouselOffsetX = e.carousel_offset_x;
   if (e.carousel_offset_y) out.carouselOffsetY = e.carousel_offset_y;
-  if (e.carousel_fit && e.carousel_fit !== "cover") out.carouselFit = e.carousel_fit;
   if (e.carousel_zoom != null && e.carousel_zoom !== 100) out.carouselZoom = e.carousel_zoom;
   return out;
 }

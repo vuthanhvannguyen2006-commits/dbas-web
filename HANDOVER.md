@@ -76,11 +76,15 @@ stays visible. Size it with the **Size** slider â€” anywhere from 20% to 400% â€
 then **drag the picture around**. It moves under your cursor, and the box shows
 only the part that will appear on the site.
 
-Below 100% the picture sits smaller than the banner and the site's dark
-background shows around it. You can also drag it right off the edge, partly or
-completely; that is allowed rather than prevented, so **Reset** is there to put
-it back if you overshoot. There is a switch to show the whole picture instead of
-filling the strip too, which suits a poster you do not want cut.
+**The whole picture is always kept.** The banner is a window onto it, never a
+crop of it, so nothing is ever trimmed away no matter how you size or place it.
+At 100% the entire picture fits inside the banner with the site's dark
+background above and below; turn the size up until those dark edges disappear if
+you want it to fill the banner instead.
+
+You can also drag the picture right off the edge, partly or completely. That is
+allowed rather than prevented, so **Reset** is there to put it back if you
+overshoot.
 
 Positioning is drag-only, so it needs a mouse or a touchscreen. Only the size can
 be set from the keyboard.

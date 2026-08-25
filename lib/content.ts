@@ -7,8 +7,6 @@ import { parseLegacyDateTime } from "./datetime";
    Both sources are normalised into the same shape so the pages never have to
    know which one they got. */
 
-export type CarouselFit = "cover" | "contain";
-
 /* The database constrains all of these with CHECK constraints, so a row read
    from it is already safe. These guards exist for the other source: the
    committed JSON in /public is a hand-editable file, and it is read straight
@@ -24,10 +22,6 @@ function clampOffset(value: unknown): number {
   const n = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(n)) return 0;
   return Math.min(200, Math.max(-200, Math.round(n)));
-}
-
-function safeFit(value: unknown): CarouselFit {
-  return value === "contain" ? "contain" : "cover";
 }
 
 /* Down to 20 so the picture can sit smaller than the banner with the
@@ -50,13 +44,14 @@ export type PublicEvent = {
   /* Optional wide picture for the carousel banner. Empty for almost every
      event; the banner falls back to `image`, so nothing has to set this. */
   carouselImage: string;
-  /* Where that picture is anchored in the banner, and whether it crops to fill
-     or shows whole. Always valid by the time they get here — see clampPercent
-     and safeFit — because both end up inside an inline style. */
+  /* Where that picture sits in the banner and how big it is. The banner never
+     crops it — it is a window onto the whole picture — so between them these
+     decide everything about how it appears. Already clamped by the time they
+     get here, because both end up inside an inline style. */
   carouselOffsetX: number;
   carouselOffsetY: number;
-  carouselFit: CarouselFit;
-  /* Enlargement as a percentage; 100 is the plain cover crop. */
+  /* Size as a percentage. 100 fits the whole picture inside the banner; higher
+     fills it and spills past the edges; lower leaves the ground showing. */
   carouselZoom: number;
   cta: string | null;
   link: string;
@@ -90,7 +85,6 @@ type LegacyEvent = {
   carouselImage?: string;
   carouselOffsetX?: number;
   carouselOffsetY?: number;
-  carouselFit?: string;
   carouselZoom?: number;
   cta?: string;
   link?: string;
@@ -119,7 +113,6 @@ function fromLegacy(e: LegacyEvent, featured: boolean, index: number): PublicEve
     carouselImage: resolveImageUrl(e.carouselImage) ?? "",
     carouselOffsetX: clampOffset(e.carouselOffsetX ?? 0),
     carouselOffsetY: clampOffset(e.carouselOffsetY ?? 0),
-    carouselFit: safeFit(e.carouselFit),
     carouselZoom: clampZoom(e.carouselZoom ?? 100),
     cta: e.cta ?? null,
     link: e.link ?? "",
@@ -182,7 +175,6 @@ export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Sou
           carouselImage: resolveImageUrl(e.carousel_image_url as string) ?? "",
           carouselOffsetX: clampOffset(e.carousel_offset_x ?? 0),
           carouselOffsetY: clampOffset(e.carousel_offset_y ?? 0),
-          carouselFit: safeFit(e.carousel_fit),
           carouselZoom: clampZoom(e.carousel_zoom ?? 100),
           cta: (e.cta as string) ?? null,
           link: (e.link as string) ?? "",

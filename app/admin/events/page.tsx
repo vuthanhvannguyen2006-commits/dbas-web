@@ -5,7 +5,6 @@ import { supabase } from "@/lib/supabase";
 import ImageField from "@/components/admin/image-field";
 import CarouselFraming from "@/components/admin/carousel-framing";
 import { EVENT_TAGS, type EventRow } from "@/lib/types";
-import type { CarouselFit } from "@/lib/content";
 import {
   formatEventDate,
   isPast,
@@ -25,7 +24,6 @@ type Draft = {
   carouselImageUrl: string;
   carouselOffsetX: number;
   carouselOffsetY: number;
-  carouselFit: CarouselFit;
   carouselZoom: number;
   cta: string;
   link: string;
@@ -43,7 +41,6 @@ const EMPTY: Draft = {
   carouselImageUrl: "",
   carouselOffsetX: 0,
   carouselOffsetY: 0,
-  carouselFit: "cover",
   carouselZoom: 100,
   cta: "",
   link: "",
@@ -62,7 +59,6 @@ function toDraft(e: EventRow): Draft {
     carouselImageUrl: e.carousel_image_url ?? "",
     carouselOffsetX: e.carousel_offset_x ?? 0,
     carouselOffsetY: e.carousel_offset_y ?? 0,
-    carouselFit: e.carousel_fit === "contain" ? "contain" : "cover",
     carouselZoom: e.carousel_zoom ?? 100,
     cta: e.cta ?? "",
     link: e.link ?? "",
@@ -151,7 +147,6 @@ export default function AdminEventsPage() {
       carousel_image_url: draft.carouselImageUrl.trim() || null,
       carousel_offset_x: draft.carouselOffsetX,
       carousel_offset_y: draft.carouselOffsetY,
-      carousel_fit: draft.carouselFit,
       carousel_zoom: draft.carouselZoom,
       cta: draft.cta.trim() || null,
       link: draft.link.trim() || null,
@@ -301,14 +296,12 @@ export default function AdminEventsPage() {
             imageUrl={draft.carouselImageUrl || draft.imageUrl}
             offsetX={draft.carouselOffsetX}
             offsetY={draft.carouselOffsetY}
-            fit={draft.carouselFit}
             zoom={draft.carouselZoom}
-            onChange={({ offsetX, offsetY, fit, zoom }) =>
+            onChange={({ offsetX, offsetY, zoom }) =>
               setDraft((d) => ({
                 ...d,
                 carouselOffsetX: offsetX,
                 carouselOffsetY: offsetY,
-                carouselFit: fit,
                 carouselZoom: zoom,
               }))
             }
