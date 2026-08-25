@@ -25,6 +25,15 @@ function safeFit(value: unknown): CarouselFit {
   return value === "contain" ? "contain" : "cover";
 }
 
+/* Zoom is a multiplier rather than a position, so it gets its own range. Below
+   100 would shrink the picture inside the banner and expose the background,
+   which is what the "show whole image" fit is for; above 400 is mush. */
+function clampZoom(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return 100;
+  return Math.min(400, Math.max(100, Math.round(n)));
+}
+
 export type PublicEvent = {
   id: string;
   tag: string;
@@ -42,6 +51,8 @@ export type PublicEvent = {
   carouselFocalX: number;
   carouselFocalY: number;
   carouselFit: CarouselFit;
+  /* Enlargement as a percentage; 100 is the plain cover crop. */
+  carouselZoom: number;
   cta: string | null;
   link: string;
   isFeatured: boolean;
@@ -75,6 +86,7 @@ type LegacyEvent = {
   carouselFocalX?: number;
   carouselFocalY?: number;
   carouselFit?: string;
+  carouselZoom?: number;
   cta?: string;
   link?: string;
 };
@@ -103,6 +115,7 @@ function fromLegacy(e: LegacyEvent, featured: boolean, index: number): PublicEve
     carouselFocalX: clampPercent(e.carouselFocalX ?? 50),
     carouselFocalY: clampPercent(e.carouselFocalY ?? 50),
     carouselFit: safeFit(e.carouselFit),
+    carouselZoom: clampZoom(e.carouselZoom ?? 100),
     cta: e.cta ?? null,
     link: e.link ?? "",
     isFeatured: featured,
@@ -165,6 +178,7 @@ export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Sou
           carouselFocalX: clampPercent(e.carousel_focal_x ?? 50),
           carouselFocalY: clampPercent(e.carousel_focal_y ?? 50),
           carouselFit: safeFit(e.carousel_fit),
+          carouselZoom: clampZoom(e.carousel_zoom ?? 100),
           cta: (e.cta as string) ?? null,
           link: (e.link as string) ?? "",
           isFeatured: Boolean(e.is_featured),

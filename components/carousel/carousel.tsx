@@ -14,6 +14,8 @@ export type Slide = {
      slides, which then fall back to what the stylesheet already does. */
   imageFit?: "cover" | "contain";
   imagePosition?: string;
+  /** Enlargement as a multiplier; 1 leaves the picture at its cover size. */
+  imageZoom?: number;
   tag?: string;
   title: string;
   description?: string;
@@ -50,6 +52,16 @@ export default function Carousel({ slides }: Props) {
               style={{
                 objectFit: slide.imageFit ?? "cover",
                 objectPosition: slide.imagePosition ?? "center",
+                /* Scaled about the same point the picture is anchored to, so
+                   zooming pulls in towards whatever was chosen rather than
+                   towards the middle and sliding it off. At zoom 1 this is an
+                   identity transform and changes nothing. The section clips
+                   the overflow, which is what makes the banner a window onto
+                   the picture rather than the whole of it. */
+                transform: slide.imageZoom && slide.imageZoom !== 1
+                  ? `scale(${slide.imageZoom})`
+                  : undefined,
+                transformOrigin: slide.imagePosition ?? "center",
               }}
             />
             <div className={styles.overlay} />

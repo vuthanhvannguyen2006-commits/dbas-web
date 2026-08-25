@@ -72,9 +72,11 @@ poster loses its top and bottom there while looking fine on the event's card
 below — this lets one event use a different picture in each place.
 
 Underneath it, **"Position on the carousel"** decides which part of that picture
-stays visible. Click the part that matters — a face, a logo — and the banner
-keeps it in view; the sliders nudge it. There is also a switch to show the whole
-picture instead of filling the strip, which suits a poster you do not want cut.
+stays visible. Size it with the **Size** slider, then **drag the picture around**
+— it moves under your cursor, and the box shows only the part that will appear
+on the site. The other two sliders nudge it precisely. There is also a switch to
+show the whole picture instead of filling the strip, which suits a poster you do
+not want cut, and a Reset button that puts everything back to the middle.
 
 Check both shapes before saving. The heading and button sit **over the picture**,
 on the right on a computer and along the bottom on a phone, and the preview

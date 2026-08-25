@@ -26,6 +26,7 @@ type Draft = {
   carouselFocalX: number;
   carouselFocalY: number;
   carouselFit: CarouselFit;
+  carouselZoom: number;
   cta: string;
   link: string;
   isFeatured: boolean;
@@ -43,6 +44,7 @@ const EMPTY: Draft = {
   carouselFocalX: 50,
   carouselFocalY: 50,
   carouselFit: "cover",
+  carouselZoom: 100,
   cta: "",
   link: "",
   isFeatured: false,
@@ -61,6 +63,7 @@ function toDraft(e: EventRow): Draft {
     carouselFocalX: e.carousel_focal_x ?? 50,
     carouselFocalY: e.carousel_focal_y ?? 50,
     carouselFit: e.carousel_fit === "contain" ? "contain" : "cover",
+    carouselZoom: e.carousel_zoom ?? 100,
     cta: e.cta ?? "",
     link: e.link ?? "",
     isFeatured: e.is_featured,
@@ -149,6 +152,7 @@ export default function AdminEventsPage() {
       carousel_focal_x: draft.carouselFocalX,
       carousel_focal_y: draft.carouselFocalY,
       carousel_fit: draft.carouselFit,
+      carousel_zoom: draft.carouselZoom,
       cta: draft.cta.trim() || null,
       link: draft.link.trim() || null,
       is_featured: draft.isFeatured,
@@ -298,12 +302,14 @@ export default function AdminEventsPage() {
             focalX={draft.carouselFocalX}
             focalY={draft.carouselFocalY}
             fit={draft.carouselFit}
-            onChange={({ focalX, focalY, fit }) =>
+            zoom={draft.carouselZoom}
+            onChange={({ focalX, focalY, fit, zoom }) =>
               setDraft((d) => ({
                 ...d,
                 carouselFocalX: focalX,
                 carouselFocalY: focalY,
                 carouselFit: fit,
+                carouselZoom: zoom,
               }))
             }
           />

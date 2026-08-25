@@ -68,6 +68,7 @@ function toLegacyEvent(e, index) {
   if (e.carousel_focal_x != null && e.carousel_focal_x !== 50) out.carouselFocalX = e.carousel_focal_x;
   if (e.carousel_focal_y != null && e.carousel_focal_y !== 50) out.carouselFocalY = e.carousel_focal_y;
   if (e.carousel_fit && e.carousel_fit !== "cover") out.carouselFit = e.carousel_fit;
+  if (e.carousel_zoom != null && e.carousel_zoom !== 100) out.carouselZoom = e.carousel_zoom;
   return out;
 }
 

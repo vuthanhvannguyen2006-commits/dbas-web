@@ -34,7 +34,13 @@ type Props = {
   focalX: number;
   focalY: number;
   fit: CarouselFit;
-  onChange: (next: { focalX: number; focalY: number; fit: CarouselFit }) => void;
+  zoom: number;
+  onChange: (next: {
+    focalX: number;
+    focalY: number;
+    fit: CarouselFit;
+    zoom: number;
+  }) => void;
 };
 
 function clamp(n: number): number {
@@ -46,6 +52,7 @@ export default function CarouselFraming({
   focalX,
   focalY,
   fit,
+  zoom,
   onChange,
 }: Props) {
   const [shape, setShape] = useState<"desktop" | "mobile">("desktop");
@@ -54,6 +61,11 @@ export default function CarouselFraming({
      handlers must gate on it immediately, within the same event — not after a
      render. `dragging` exists only to drive the cursor. */
   const activePointer = useRef<number | null>(null);
+  /* Where the drag began, in cursor pixels and in anchor percentages. Panning
+     is measured from this rather than accumulated per event, so the picture
+     cannot drift from rounding over a long drag, and clamping at an edge does
+     not lose the rest of the gesture — pull back and it picks up where it was. */
+  const dragStart = useRef<{ px: number; py: number; fx: number; fy: number } | null>(null);
   const src = resolveImageUrl(imageUrl);
 
   // Nothing to frame yet. Showing an empty box here would imply the controls
@@ -62,16 +74,24 @@ export default function CarouselFraming({
 
   const isMobile = shape === "mobile";
 
-  /* Pointer events rather than mouse events, so one code path covers mouse,
-     trackpad, touch and pen. A tap is just a drag of zero distance, which is
-     why there is no separate click handler — having both would fire twice for
-     every press. */
-  function moveTo(e: React.PointerEvent<HTMLDivElement>) {
-    const box = e.currentTarget.getBoundingClientRect();
+  /* Direct manipulation: the picture follows the cursor, the way it does in
+     every other crop tool. That is the opposite of what a click-to-focus
+     control does — dragging right shows more of the LEFT of the picture, so
+     the anchor has to move against the cursor, not with it.
+
+     Divided by the zoom because an enlarged picture has proportionally more
+     hidden behind the edges of the window: at 2x the same cursor travel should
+     move it half as far through the picture, or dragging becomes unusable the
+     moment you zoom in. */
+  function panBy(dx: number, dy: number, box: DOMRect) {
+    const start = dragStart.current;
+    if (!start) return;
+    const factor = zoom / 100;
     onChange({
-      focalX: clamp(((e.clientX - box.left) / box.width) * 100),
-      focalY: clamp(((e.clientY - box.top) / box.height) * 100),
+      focalX: clamp(start.fx - (dx / box.width) * 100 / factor),
+      focalY: clamp(start.fy - (dy / box.height) * 100 / factor),
       fit,
+      zoom,
     });
   }
 
@@ -87,6 +107,7 @@ export default function CarouselFraming({
     if (activePointer.current !== null) return;
 
     activePointer.current = e.pointerId;
+    dragStart.current = { px: e.clientX, py: e.clientY, fx: focalX, fy: focalY };
     setDragging(true);
 
     /* Capture routes later events for this pointer back here even once the
@@ -102,17 +123,23 @@ export default function CarouselFraming({
       /* Nothing to do — the drag still works from the events we receive. */
     }
 
-    moveTo(e);
+    /* Deliberately no move on press. A pan tool that jumped the picture on
+       mousedown would fight the very gesture it exists for. */
   }
 
   function drag(e: React.PointerEvent<HTMLDivElement>) {
-    if (activePointer.current !== e.pointerId) return;
-    moveTo(e);
+    if (activePointer.current !== e.pointerId || !dragStart.current) return;
+    panBy(
+      e.clientX - dragStart.current.px,
+      e.clientY - dragStart.current.py,
+      e.currentTarget.getBoundingClientRect()
+    );
   }
 
   function endDrag(e: React.PointerEvent<HTMLDivElement>) {
     if (activePointer.current !== e.pointerId) return;
     activePointer.current = null;
+    dragStart.current = null;
     setDragging(false);
     try {
       if (e.currentTarget.hasPointerCapture(e.pointerId)) {
@@ -175,7 +202,13 @@ export default function CarouselFraming({
           alt=""
           draggable={false}
           className={styles.framing_image}
-          style={{ objectFit: fit, objectPosition: `${focalX}% ${focalY}%` }}
+          style={{
+            objectFit: fit,
+            objectPosition: `${focalX}% ${focalY}%`,
+            // Must match carousel.tsx exactly, or the preview stops being a preview.
+            transform: zoom !== 100 ? `scale(${zoom / 100})` : undefined,
+            transformOrigin: `${focalX}% ${focalY}%`,
+          }}
         />
         <div
           className={styles.framing_overlay}
@@ -199,12 +232,25 @@ export default function CarouselFraming({
       </div>
 
       <small className={styles.hint}>
-        Drag on the picture to choose the part that matters most — a face, a logo
-        — and the banner keeps it in view. Check both shapes: the text covers the
-        right side on a computer and the bottom on a phone.
+        Size the picture first, then drag it around — the box shows only the part
+        that will appear. Check both shapes: the text covers the right side on a
+        computer and the bottom on a phone.
       </small>
 
       <div className={styles.framing_sliders}>
+        <label>
+          Size: {zoom}%
+          <input
+            type="range"
+            min={100}
+            max={400}
+            step={5}
+            value={zoom}
+            onChange={(e) =>
+              onChange({ focalX, focalY, fit, zoom: Number(e.target.value) })
+            }
+          />
+        </label>
         <label>
           Left to right: {focalX}%
           <input
@@ -212,7 +258,9 @@ export default function CarouselFraming({
             min={0}
             max={100}
             value={focalX}
-            onChange={(e) => onChange({ focalX: Number(e.target.value), focalY, fit })}
+            onChange={(e) =>
+              onChange({ focalX: Number(e.target.value), focalY, fit, zoom })
+            }
           />
         </label>
         <label>
@@ -222,7 +270,9 @@ export default function CarouselFraming({
             min={0}
             max={100}
             value={focalY}
-            onChange={(e) => onChange({ focalX, focalY: Number(e.target.value), fit })}
+            onChange={(e) =>
+              onChange({ focalX, focalY: Number(e.target.value), fit, zoom })
+            }
           />
         </label>
       </div>
@@ -233,7 +283,12 @@ export default function CarouselFraming({
             type="checkbox"
             checked={fit === "contain"}
             onChange={(e) =>
-              onChange({ focalX, focalY, fit: e.target.checked ? "contain" : "cover" })
+              onChange({
+                focalX,
+                focalY,
+                fit: e.target.checked ? "contain" : "cover",
+                zoom,
+              })
             }
           />
           <span>Show the whole picture instead of filling the banner</span>
@@ -242,9 +297,9 @@ export default function CarouselFraming({
         <button
           type="button"
           className={styles.ghost_button}
-          onClick={() => onChange({ focalX: 50, focalY: 50, fit: "cover" })}
+          onClick={() => onChange({ focalX: 50, focalY: 50, fit: "cover", zoom: 100 })}
         >
-          Reset to centre
+          Reset
         </button>
       </div>
     </div>

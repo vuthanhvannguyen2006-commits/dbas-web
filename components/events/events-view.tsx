@@ -48,6 +48,7 @@ function toSlide(ev: PublicEvent): Slide {
     imageAlt: ev.title,
     imageFit: ev.carouselFit,
     imagePosition: `${ev.carouselFocalX}% ${ev.carouselFocalY}%`,
+    imageZoom: ev.carouselZoom / 100,
     tag: ev.tag,
     title: ev.title,
     description: ev.description ?? undefined,

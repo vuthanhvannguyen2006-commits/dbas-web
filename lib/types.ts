@@ -16,6 +16,7 @@ export type EventRow = {
   carousel_focal_x: number;
   carousel_focal_y: number;
   carousel_fit: string;
+  carousel_zoom: number;
   cta: string | null;
   link: string | null;
   is_featured: boolean;
