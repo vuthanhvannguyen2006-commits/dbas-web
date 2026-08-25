@@ -72,11 +72,15 @@ poster loses its top and bottom there while looking fine on the event's card
 below — this lets one event use a different picture in each place.
 
 Underneath it, **"Position on the carousel"** decides which part of that picture
-stays visible. Size it with the **Size** slider, then **drag the picture around**
-— it moves under your cursor, and the box shows only the part that will appear
-on the site. There is also a switch to show the whole picture instead of filling
-the strip, which suits a poster you do not want cut, and a Reset button that puts
-everything back to the middle.
+stays visible. Size it with the **Size** slider — anywhere from 20% to 400% —
+then **drag the picture around**. It moves under your cursor, and the box shows
+only the part that will appear on the site.
+
+Below 100% the picture sits smaller than the banner and the site's dark
+background shows around it. You can also drag it right off the edge, partly or
+completely; that is allowed rather than prevented, so **Reset** is there to put
+it back if you overshoot. There is a switch to show the whole picture instead of
+filling the strip too, which suits a poster you do not want cut.
 
 Positioning is drag-only, so it needs a mouse or a touchscreen. Only the size can
 be set from the keyboard.

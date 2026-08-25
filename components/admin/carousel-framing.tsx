@@ -16,7 +16,7 @@ import styles from "@/app/admin/admin.module.css";
         the LEFT half. Under 768px the gradient turns vertical and the card goes
         along the bottom, so the usable area becomes the TOP half instead.
 
-   One focal point serves both layouts, so the preview offers both rather than
+   One setting serves both layouts, so the preview offers both rather than
    picking one and letting the other surprise someone later. The gradients below
    are deliberately copies of the real ones in carousel.module.css — if those
    are ever retuned, these should be retuned with them, or this stops telling
@@ -31,26 +31,29 @@ const MOBILE_GRADIENT =
 type Props = {
   /** What the banner would actually show: the carousel image, or the event image. */
   imageUrl: string;
-  focalX: number;
-  focalY: number;
+  offsetX: number;
+  offsetY: number;
   fit: CarouselFit;
   zoom: number;
   onChange: (next: {
-    focalX: number;
-    focalY: number;
+    offsetX: number;
+    offsetY: number;
     fit: CarouselFit;
     zoom: number;
   }) => void;
 };
 
-function clamp(n: number): number {
-  return Math.min(100, Math.max(0, Math.round(n)));
+/* Wide enough to push the picture right out of the banner, which is allowed —
+   Reset brings it back. Without any bound a stray drag could store a number
+   nobody could make sense of later. */
+function clampOffset(n: number): number {
+  return Math.min(200, Math.max(-200, Math.round(n)));
 }
 
 export default function CarouselFraming({
   imageUrl,
-  focalX,
-  focalY,
+  offsetX,
+  offsetY,
   fit,
   zoom,
   onChange,
@@ -74,22 +77,20 @@ export default function CarouselFraming({
 
   const isMobile = shape === "mobile";
 
-  /* Direct manipulation: the picture follows the cursor, the way it does in
-     every other crop tool. That is the opposite of what a click-to-focus
-     control does — dragging right shows more of the LEFT of the picture, so
-     the anchor has to move against the cursor, not with it.
+  /* The picture follows the cursor exactly. Offsets are a percentage of the
+     box, and translate() percentages resolve against the element's own box
+     rather than against the scale, so a drag of N pixels moves the picture N
+     pixels at any zoom — no correction factor, and no drift between what the
+     hand does and what the eye sees.
 
-     Divided by the zoom because an enlarged picture has proportionally more
-     hidden behind the edges of the window: at 2x the same cursor travel should
-     move it half as far through the picture, or dragging becomes unusable the
-     moment you zoom in. */
+     Measured from where the drag began rather than accumulated per event, so
+     rounding cannot creep over a long drag. */
   function panBy(dx: number, dy: number, box: DOMRect) {
     const start = dragStart.current;
     if (!start) return;
-    const factor = zoom / 100;
     onChange({
-      focalX: clamp(start.fx - (dx / box.width) * 100 / factor),
-      focalY: clamp(start.fy - (dy / box.height) * 100 / factor),
+      offsetX: clampOffset(start.fx + (dx / box.width) * 100),
+      offsetY: clampOffset(start.fy + (dy / box.height) * 100),
       fit,
       zoom,
     });
@@ -107,7 +108,7 @@ export default function CarouselFraming({
     if (activePointer.current !== null) return;
 
     activePointer.current = e.pointerId;
-    dragStart.current = { px: e.clientX, py: e.clientY, fx: focalX, fy: focalY };
+    dragStart.current = { px: e.clientX, py: e.clientY, fx: offsetX, fy: offsetY };
     setDragging(true);
 
     /* Capture routes later events for this pointer back here even once the
@@ -168,9 +169,10 @@ export default function CarouselFraming({
         ))}
       </div>
 
-      {/* Click target as well as preview. A button would be more obviously
-          clickable, but it cannot contain the layered preview, so the keyboard
-          path is the two sliders underneath rather than this. */}
+      {/* Drag surface as well as preview. Positioning is pointer-only: the
+          preview is aria-hidden and not focusable, and the position sliders
+          that once provided a keyboard path were removed as redundant once
+          dragging moved the picture directly. Size remains keyboard-operable. */}
       {/* The two shapes have to be sized from opposite axes. The wide one fills
           the available width and derives its height; the tall one would then be
           ~700px high, so it is driven from a fixed height and derives its width
@@ -204,10 +206,13 @@ export default function CarouselFraming({
           className={styles.framing_image}
           style={{
             objectFit: fit,
-            objectPosition: `${focalX}% ${focalY}%`,
-            // Must match carousel.tsx exactly, or the preview stops being a preview.
-            transform: zoom !== 100 ? `scale(${zoom / 100})` : undefined,
-            transformOrigin: `${focalX}% ${focalY}%`,
+            /* Must compose exactly as carousel.tsx does — same order, same
+               units — or this stops being a preview and starts being a
+               plausible-looking lie. */
+            transform:
+              offsetX === 0 && offsetY === 0 && zoom === 100
+                ? undefined
+                : `translate(${offsetX}%, ${offsetY}%) scale(${zoom / 100})`,
           }}
         />
         <div
@@ -237,12 +242,12 @@ export default function CarouselFraming({
           Size: {zoom}%
           <input
             type="range"
-            min={100}
+            min={20}
             max={400}
             step={5}
             value={zoom}
             onChange={(e) =>
-              onChange({ focalX, focalY, fit, zoom: Number(e.target.value) })
+              onChange({ offsetX, offsetY, fit, zoom: Number(e.target.value) })
             }
           />
         </label>
@@ -255,8 +260,8 @@ export default function CarouselFraming({
             checked={fit === "contain"}
             onChange={(e) =>
               onChange({
-                focalX,
-                focalY,
+                offsetX,
+                offsetY,
                 fit: e.target.checked ? "contain" : "cover",
                 zoom,
               })
@@ -268,7 +273,7 @@ export default function CarouselFraming({
         <button
           type="button"
           className={styles.ghost_button}
-          onClick={() => onChange({ focalX: 50, focalY: 50, fit: "cover", zoom: 100 })}
+          onClick={() => onChange({ offsetX: 0, offsetY: 0, fit: "cover", zoom: 100 })}
         >
           Reset
         </button>

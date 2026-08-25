@@ -23,8 +23,8 @@ type Draft = {
   location: string;
   imageUrl: string;
   carouselImageUrl: string;
-  carouselFocalX: number;
-  carouselFocalY: number;
+  carouselOffsetX: number;
+  carouselOffsetY: number;
   carouselFit: CarouselFit;
   carouselZoom: number;
   cta: string;
@@ -41,8 +41,8 @@ const EMPTY: Draft = {
   location: "",
   imageUrl: "",
   carouselImageUrl: "",
-  carouselFocalX: 50,
-  carouselFocalY: 50,
+  carouselOffsetX: 0,
+  carouselOffsetY: 0,
   carouselFit: "cover",
   carouselZoom: 100,
   cta: "",
@@ -60,8 +60,8 @@ function toDraft(e: EventRow): Draft {
     location: e.location ?? "",
     imageUrl: e.image_url ?? "",
     carouselImageUrl: e.carousel_image_url ?? "",
-    carouselFocalX: e.carousel_focal_x ?? 50,
-    carouselFocalY: e.carousel_focal_y ?? 50,
+    carouselOffsetX: e.carousel_offset_x ?? 0,
+    carouselOffsetY: e.carousel_offset_y ?? 0,
     carouselFit: e.carousel_fit === "contain" ? "contain" : "cover",
     carouselZoom: e.carousel_zoom ?? 100,
     cta: e.cta ?? "",
@@ -149,8 +149,8 @@ export default function AdminEventsPage() {
       location: draft.location.trim() || null,
       image_url: draft.imageUrl.trim() || null,
       carousel_image_url: draft.carouselImageUrl.trim() || null,
-      carousel_focal_x: draft.carouselFocalX,
-      carousel_focal_y: draft.carouselFocalY,
+      carousel_offset_x: draft.carouselOffsetX,
+      carousel_offset_y: draft.carouselOffsetY,
       carousel_fit: draft.carouselFit,
       carousel_zoom: draft.carouselZoom,
       cta: draft.cta.trim() || null,
@@ -299,15 +299,15 @@ export default function AdminEventsPage() {
               the carousel one when set and the event one otherwise. */}
           <CarouselFraming
             imageUrl={draft.carouselImageUrl || draft.imageUrl}
-            focalX={draft.carouselFocalX}
-            focalY={draft.carouselFocalY}
+            offsetX={draft.carouselOffsetX}
+            offsetY={draft.carouselOffsetY}
             fit={draft.carouselFit}
             zoom={draft.carouselZoom}
-            onChange={({ focalX, focalY, fit, zoom }) =>
+            onChange={({ offsetX, offsetY, fit, zoom }) =>
               setDraft((d) => ({
                 ...d,
-                carouselFocalX: focalX,
-                carouselFocalY: focalY,
+                carouselOffsetX: offsetX,
+                carouselOffsetY: offsetY,
                 carouselFit: fit,
                 carouselZoom: zoom,
               }))
