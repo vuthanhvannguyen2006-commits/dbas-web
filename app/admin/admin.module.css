@@ -798,17 +798,6 @@
   color: rgba(231, 200, 76, 0.75);
 }
 
-.framing_crosshair {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
-  border-radius: 50%;
-  border: 2px solid var(--dbas-gold);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55);
-  pointer-events: none;
-}
-
 .framing_sliders {
   display: flex;
   flex-wrap: wrap;

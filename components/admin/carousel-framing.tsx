@@ -224,11 +224,6 @@ export default function CarouselFraming({
         >
           <span>Text sits here</span>
         </div>
-        <div
-          className={styles.framing_crosshair}
-          style={{ left: `${focalX}%`, top: `${focalY}%` }}
-          aria-hidden="true"
-        />
       </div>
 
       <small className={styles.hint}>
@@ -248,30 +243,6 @@ export default function CarouselFraming({
             value={zoom}
             onChange={(e) =>
               onChange({ focalX, focalY, fit, zoom: Number(e.target.value) })
-            }
-          />
-        </label>
-        <label>
-          Left to right: {focalX}%
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={focalX}
-            onChange={(e) =>
-              onChange({ focalX: Number(e.target.value), focalY, fit, zoom })
-            }
-          />
-        </label>
-        <label>
-          Top to bottom: {focalY}%
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={focalY}
-            onChange={(e) =>
-              onChange({ focalX, focalY: Number(e.target.value), fit, zoom })
             }
           />
         </label>
