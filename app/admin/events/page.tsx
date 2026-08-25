@@ -20,6 +20,7 @@ type Draft = {
   startsAtLocal: string;
   location: string;
   imageUrl: string;
+  carouselImageUrl: string;
   cta: string;
   link: string;
   isFeatured: boolean;
@@ -33,6 +34,7 @@ const EMPTY: Draft = {
   startsAtLocal: "",
   location: "",
   imageUrl: "",
+  carouselImageUrl: "",
   cta: "",
   link: "",
   isFeatured: false,
@@ -47,6 +49,7 @@ function toDraft(e: EventRow): Draft {
     startsAtLocal: isoToMelbourneLocal(e.starts_at),
     location: e.location ?? "",
     imageUrl: e.image_url ?? "",
+    carouselImageUrl: e.carousel_image_url ?? "",
     cta: e.cta ?? "",
     link: e.link ?? "",
     isFeatured: e.is_featured,
@@ -131,6 +134,7 @@ export default function AdminEventsPage() {
       starts_at: startsAtIso,
       location: draft.location.trim() || null,
       image_url: draft.imageUrl.trim() || null,
+      carousel_image_url: draft.carouselImageUrl.trim() || null,
       cta: draft.cta.trim() || null,
       link: draft.link.trim() || null,
       is_featured: draft.isFeatured,
@@ -257,6 +261,21 @@ export default function AdminEventsPage() {
             onChange={(v) => set("imageUrl", v)}
             folder="events"
           />
+
+          {/* Always shown, not gated on the featured checkbox, so it can be set
+              in advance for an event you intend to feature later. */}
+          <ImageField
+            label="Carousel image (optional)"
+            value={draft.carouselImageUrl}
+            onChange={(v) => set("carouselImageUrl", v)}
+            folder="events"
+          />
+          <small className={styles.hint}>
+            Used only for the wide banner at the top of the Events page, and only
+            while this event is the featured one. A landscape picture works best
+            — the banner crops tall images top and bottom. Leave it empty to use
+            the event image above.
+          </small>
 
           <div className={styles.toggle_row}>
             <label className={styles.toggle}>

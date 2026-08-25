@@ -7,6 +7,9 @@ export type EventRow = {
   starts_at: string;
   location: string | null;
   image_url: string | null;
+  /* Optional wide picture for the /events carousel banner, used only while the
+     event is featured. Falls back to image_url when null. */
+  carousel_image_url: string | null;
   cta: string | null;
   link: string | null;
   is_featured: boolean;
