@@ -7,6 +7,33 @@ import { parseLegacyDateTime } from "./datetime";
    Both sources are normalised into the same shape so the pages never have to
    know which one they got. */
 
+export type CarouselFit = "cover" | "contain";
+
+/* The database constrains both of these with CHECK constraints, so a row read
+   from it is already safe. These guards exist for the other source: the
+   committed JSON in /public is a hand-editable file, and it is read straight
+   into the page at build time. Since the values are composed into an inline
+   style attribute, "the database checks it" is not enough on its own — anything
+   unexpected has to land on the default rather than reach the DOM. */
+function clampPercent(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return 50;
+  return Math.min(100, Math.max(0, Math.round(n)));
+}
+
+function safeFit(value: unknown): CarouselFit {
+  return value === "contain" ? "contain" : "cover";
+}
+
+/* Zoom is a multiplier rather than a position, so it gets its own range. Below
+   100 would shrink the picture inside the banner and expose the background,
+   which is what the "show whole image" fit is for; above 400 is mush. */
+function clampZoom(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return 100;
+  return Math.min(400, Math.max(100, Math.round(n)));
+}
+
 export type PublicEvent = {
   id: string;
   tag: string;
@@ -18,6 +45,14 @@ export type PublicEvent = {
   /* Optional wide picture for the carousel banner. Empty for almost every
      event; the banner falls back to `image`, so nothing has to set this. */
   carouselImage: string;
+  /* Where that picture is anchored in the banner, and whether it crops to fill
+     or shows whole. Always valid by the time they get here — see clampPercent
+     and safeFit — because both end up inside an inline style. */
+  carouselFocalX: number;
+  carouselFocalY: number;
+  carouselFit: CarouselFit;
+  /* Enlargement as a percentage; 100 is the plain cover crop. */
+  carouselZoom: number;
   cta: string | null;
   link: string;
   isFeatured: boolean;
@@ -48,6 +83,10 @@ type LegacyEvent = {
   location?: string;
   image?: string;
   carouselImage?: string;
+  carouselFocalX?: number;
+  carouselFocalY?: number;
+  carouselFit?: string;
+  carouselZoom?: number;
   cta?: string;
   link?: string;
 };
@@ -73,6 +112,10 @@ function fromLegacy(e: LegacyEvent, featured: boolean, index: number): PublicEve
     location: e.location ?? "",
     image: resolveImageUrl(e.image) ?? "",
     carouselImage: resolveImageUrl(e.carouselImage) ?? "",
+    carouselFocalX: clampPercent(e.carouselFocalX ?? 50),
+    carouselFocalY: clampPercent(e.carouselFocalY ?? 50),
+    carouselFit: safeFit(e.carouselFit),
+    carouselZoom: clampZoom(e.carouselZoom ?? 100),
     cta: e.cta ?? null,
     link: e.link ?? "",
     isFeatured: featured,
@@ -132,6 +175,10 @@ export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Sou
           location: (e.location as string) ?? "",
           image: resolveImageUrl(e.image_url as string) ?? "",
           carouselImage: resolveImageUrl(e.carousel_image_url as string) ?? "",
+          carouselFocalX: clampPercent(e.carousel_focal_x ?? 50),
+          carouselFocalY: clampPercent(e.carousel_focal_y ?? 50),
+          carouselFit: safeFit(e.carousel_fit),
+          carouselZoom: clampZoom(e.carousel_zoom ?? 100),
           cta: (e.cta as string) ?? null,
           link: (e.link as string) ?? "",
           isFeatured: Boolean(e.is_featured),

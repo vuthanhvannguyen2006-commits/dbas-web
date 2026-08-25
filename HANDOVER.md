@@ -71,6 +71,21 @@ it always did. It exists because the banner crops to a wide strip, so a tall
 poster loses its top and bottom there while looking fine on the event's card
 below — this lets one event use a different picture in each place.
 
+Underneath it, **"Position on the carousel"** decides which part of that picture
+stays visible. Size it with the **Size** slider, then **drag the picture around**
+— it moves under your cursor, and the box shows only the part that will appear
+on the site. There is also a switch to show the whole picture instead of filling
+the strip, which suits a poster you do not want cut, and a Reset button that puts
+everything back to the middle.
+
+Positioning is drag-only, so it needs a mouse or a touchscreen. Only the size can
+be set from the keyboard.
+
+Check both shapes before saving. The heading and button sit **over the picture**,
+on the right on a computer and along the bottom on a phone, and the preview
+outlines exactly where. A face placed dead centre disappears behind the text on
+one shape or the other — which is the reason this control exists at all.
+
 ### The two roles
 
 | Role | Can do |

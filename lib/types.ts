@@ -10,6 +10,13 @@ export type EventRow = {
   /* Optional wide picture for the /events carousel banner, used only while the
      event is featured. Falls back to image_url when null. */
   carousel_image_url: string | null;
+  /* How that picture sits in the banner. Focal points are 0-100 and become
+     object-position; fit is constrained to cover or contain by the database,
+     because both are rendered into an inline style. */
+  carousel_focal_x: number;
+  carousel_focal_y: number;
+  carousel_fit: string;
+  carousel_zoom: number;
   cta: string | null;
   link: string | null;
   is_featured: boolean;
