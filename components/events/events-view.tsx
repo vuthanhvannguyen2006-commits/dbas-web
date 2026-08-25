@@ -41,7 +41,10 @@ function toSlide(ev: PublicEvent): Slide {
 
   return {
     id: ev.id,
-    image: ev.image,
+    /* The banner crops to a wide strip, which suits a different picture than
+       the event's card does. Falls back to the card's image, so an event that
+       never sets one behaves exactly as it did before this existed. */
+    image: ev.carouselImage || ev.image,
     imageAlt: ev.title,
     tag: ev.tag,
     title: ev.title,

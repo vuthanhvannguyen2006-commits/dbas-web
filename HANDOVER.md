@@ -64,6 +64,13 @@ Go to `/admin` on the site and sign in.
 
 Both accept an uploaded image, up to 5 MB, PNG/JPEG/WebP/GIF.
 
+Events accept a **second, optional picture** — "Carousel image". It is used only
+for the wide banner at the top of the Events page, and only while that event is
+the featured one. Leave it empty and the banner uses the event's main image, as
+it always did. It exists because the banner crops to a wide strip, so a tall
+poster loses its top and bottom there while looking fine on the event's card
+below — this lets one event use a different picture in each place.
+
 ### The two roles
 
 | Role | Can do |

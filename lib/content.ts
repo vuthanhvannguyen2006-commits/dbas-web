@@ -15,6 +15,9 @@ export type PublicEvent = {
   startsAt: string | null;
   location: string;
   image: string;
+  /* Optional wide picture for the carousel banner. Empty for almost every
+     event; the banner falls back to `image`, so nothing has to set this. */
+  carouselImage: string;
   cta: string | null;
   link: string;
   isFeatured: boolean;
@@ -44,6 +47,7 @@ type LegacyEvent = {
   time?: string;
   location?: string;
   image?: string;
+  carouselImage?: string;
   cta?: string;
   link?: string;
 };
@@ -68,6 +72,7 @@ function fromLegacy(e: LegacyEvent, featured: boolean, index: number): PublicEve
     startsAt,
     location: e.location ?? "",
     image: resolveImageUrl(e.image) ?? "",
+    carouselImage: resolveImageUrl(e.carouselImage) ?? "",
     cta: e.cta ?? null,
     link: e.link ?? "",
     isFeatured: featured,
@@ -126,6 +131,7 @@ export async function loadEvents(): Promise<{ events: PublicEvent[]; source: Sou
           startsAt: e.starts_at as string,
           location: (e.location as string) ?? "",
           image: resolveImageUrl(e.image_url as string) ?? "",
+          carouselImage: resolveImageUrl(e.carousel_image_url as string) ?? "",
           cta: (e.cta as string) ?? null,
           link: (e.link as string) ?? "",
           isFeatured: Boolean(e.is_featured),

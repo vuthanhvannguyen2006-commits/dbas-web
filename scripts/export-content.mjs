@@ -56,6 +56,11 @@ function toLegacyEvent(e, index) {
   };
   if (e.description) out.description = e.description;
   if (e.cta) out.cta = e.cta;
+  // Carried into the fallback too, or the banner would quietly revert to the
+  // event image whenever Supabase is unreachable or paused — a change nobody
+  // would think to attribute to an outage. Omitted when unset, like the two
+  // above, so the JSON stays clean for the events that never set one.
+  if (e.carousel_image_url) out.carouselImage = e.carousel_image_url;
   return out;
 }
 
