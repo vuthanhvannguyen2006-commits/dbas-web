@@ -64,13 +64,12 @@ function toSlide(ev: PublicEvent): Slide {
   };
 }
 
-/* `fallback` is read from the committed events.json on the server, so the page
-   arrives with real content already in it. The database result replaces it once
-   it arrives. If neither source can be read the fallback simply stays — which
-   is why "nothing to show" can only ever mean a source actually answered and
-   had nothing, never that a load failed. */
+/* Keep the committed copy for recovery, but don't display it while the live
+   request is pending: it can feature an older event than the current database.
+   If both requests fail, the embedded copy remains available. */
 export default function EventsView({ fallback }: { fallback: PublicEvent[] }) {
   const [events, setEvents] = useState<PublicEvent[]>(fallback);
+  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"upcoming" | "past">("upcoming");
 
   useEffect(() => {
@@ -83,7 +82,8 @@ export default function EventsView({ fallback }: { fallback: PublicEvent[] }) {
         // genuinely can have no events, and showing stale ones would be worse.
         setEvents(live);
       })
-      .catch((err) => console.warn("Events: keeping the built-in list.", err));
+      .catch((err) => console.warn("Events: keeping the built-in list.", err))
+      .finally(() => { if (!cancelled) setLoading(false); });
 
     return () => {
       cancelled = true;
@@ -103,7 +103,7 @@ export default function EventsView({ fallback }: { fallback: PublicEvent[] }) {
     <div className="events_page">
       <NavBar />
 
-      <Carousel slides={slides} />
+      <Carousel slides={slides} loading={loading} />
 
       <section className="events_listing_section" id="events">
         <MaxWidth>
@@ -114,18 +114,20 @@ export default function EventsView({ fallback }: { fallback: PublicEvent[] }) {
                 className={`events_tab ${tab === "upcoming" ? "events_tab_active" : ""}`}
                 onClick={() => setTab("upcoming")}
               >
-                Upcoming ({upcoming.length})
+                Upcoming{!loading && ` (${upcoming.length})`}
               </button>
               <button
                 className={`events_tab ${tab === "past" ? "events_tab_active" : ""}`}
                 onClick={() => setTab("past")}
               >
-                Past ({past.length})
+                Past{!loading && ` (${past.length})`}
               </button>
             </div>
           </div>
 
-          {shown.length === 0 ? (
+          {loading ? (
+            <p className="events_empty" role="status">Loading events...</p>
+          ) : shown.length === 0 ? (
             <p className="events_empty">
               {tab === "upcoming"
                 ? "Nothing coming up just yet — check back soon, or follow us on Instagram for the first word."

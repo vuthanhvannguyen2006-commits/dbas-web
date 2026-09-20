@@ -9,6 +9,16 @@
   position: relative;
   height: clamp(320px, 60vw, 480px);
 }
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  color: #d3bd78;
+  background: radial-gradient(ellipse at center, #211b10, #110d0a 75%);
+}
 
 .slide {
   position: absolute;
