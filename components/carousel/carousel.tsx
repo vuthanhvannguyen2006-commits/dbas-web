@@ -28,6 +28,7 @@ export type Slide = {
 
 type Props = {
   slides: Slide[];
+  loading?: boolean;
 };
 
 /* Returns undefined rather than a no-op transform when nothing has been moved,
@@ -43,13 +44,21 @@ function transformFor(slide: Slide): string | undefined {
   return `translate(${x}%, ${y}%) scale(${zoom})`;
 }
 
-export default function Carousel({ slides }: Props) {
+export default function Carousel({ slides, loading = false }: Props) {
   const [current, setCurrent] = useState(0);
 
   const prev = () =>
     setCurrent((s) => (s - 1 + slides.length) % slides.length);
   const next = () =>
     setCurrent((s) => (s + 1) % slides.length);
+
+  if (loading) return (
+    <section className={styles.section} aria-busy="true" aria-label="Featured events">
+      <div className={styles.track}>
+        <p className={styles.loading} role="status">Loading the latest event...</p>
+      </div>
+    </section>
+  );
 
   return (
     <section className={styles.section}>

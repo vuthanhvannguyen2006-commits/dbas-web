@@ -4,8 +4,8 @@ import EventsView from "@/components/events/events-view";
 import { adaptLegacyEvents, type PublicEvent } from "@/lib/content";
 import "@/app/events/global.css";
 
-/* Read at build time so the page ships with real content in it. The database
-   replaces this in the browser a moment later.
+/* Embed a recovery copy at build time. The client shows a loading placeholder
+   until the live request settles, so this snapshot cannot flash an old event.
 
    This is deliberately not a runtime fetch of the same file: if that request
    failed, the page would render "no events", which is indistinguishable from a
