@@ -1,0 +1,447 @@
+/* Every rule is scoped under .root and sized with container queries, so the
+   same markup adapts to the public page, the admin preview, and the phone
+   preview width alike. Specificity is deliberately (0,2,0) so it wins over the
+   page shell's generic ".shell button" styling. */
+.root {
+  container-type: inline-size;
+  container-name: album;
+  width: 100%;
+  min-width: 0;
+  margin-top: 28px;
+  color: #f2eeeb;
+  overflow-wrap: anywhere;
+}
+.root :is(div, figure, ol, li, button, p, img) {
+  box-sizing: border-box;
+}
+.root :focus-visible {
+  outline: 3px solid #e7c84c;
+  outline-offset: 3px;
+}
+.root .frameButton {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+}
+.root .frameButton img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* ------------------------------ Regular grid ------------------------------ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+.gridFigure {
+  margin: 0;
+  min-width: 0;
+  border: 1px solid #544727;
+  border-radius: 12px;
+  background: #1c160f;
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease;
+}
+.gridFigure:focus-within {
+  outline: 3px solid #e7c84c;
+  outline-offset: 4px;
+}
+.root .gridFigure .frameButton {
+  aspect-ratio: 4 / 3;
+  height: auto;
+}
+.caption {
+  margin: 0;
+  padding: 18px 20px 22px;
+  color: #ddd5c8;
+  font-size: 0.96rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------- Clusters (gallery wall, mosaic) ---------------------- */
+.wall,
+.mosaic {
+  display: grid;
+  justify-items: center;
+}
+.wall {
+  gap: clamp(36px, 8cqw, 96px);
+  padding: clamp(14px, 3cqw, 36px);
+  border: 1px solid #2c2416;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 0%, #1f1a11, #0b0906 72%);
+}
+.mosaic {
+  gap: 4px;
+}
+.cluster {
+  display: grid;
+  width: min(100%, calc(var(--cols) * 92px));
+  aspect-ratio: var(--ratio);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+  gap: clamp(4px, 1.2cqw, 14px);
+}
+.mosaic .cluster {
+  width: 100%;
+  gap: 4px;
+}
+.frame {
+  position: relative;
+  grid-column: var(--c) / span var(--cs);
+  grid-row: var(--r) / span var(--rs);
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.overlayCaption {
+  position: absolute;
+  inset: auto 0 0;
+  margin: 0;
+  padding: 28px 12px 10px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #f7f1e3;
+  background: linear-gradient(transparent, #050403e6);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Salon hang: ivory-matted dark frames, staggered by the cluster drawings. */
+.salon .frame {
+  padding: clamp(5px, 1.4cqw, 14px);
+  border: clamp(2px, 0.5cqw, 5px) solid #14100b;
+  background: #efe6d0;
+  box-shadow:
+    0 10px 24px #000a,
+    inset 0 0 0 1px #00000033;
+}
+.salon .overlayCaption {
+  inset: auto clamp(5px, 1.4cqw, 14px) clamp(5px, 1.4cqw, 14px);
+}
+
+/* Symmetrical hang: gold frames balanced around a central picture. */
+.symmetry .frame {
+  padding: clamp(4px, 1cqw, 10px);
+  border: clamp(2px, 0.45cqw, 4px) solid #c9a83c;
+  background: #0a0806;
+  box-shadow:
+    0 0 0 1px #6b5a25,
+    0 12px 26px #000c;
+}
+.symmetry .overlayCaption {
+  inset: auto clamp(4px, 1cqw, 10px) clamp(4px, 1cqw, 10px);
+}
+
+/* Mosaic: edge-to-edge tiles; a hairline of gold on the feature tile. */
+.tiles .frame:first-child {
+  box-shadow: inset 0 0 0 1px #b69a49;
+}
+.bands .frame {
+  box-shadow: inset 0 0 0 1px #3c3220;
+}
+
+/* ------------------------------- Story: chapters ------------------------------- */
+.chapters {
+  display: grid;
+  gap: clamp(40px, 9cqw, 110px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(20px, 4cqw, 56px);
+  align-items: center;
+  min-width: 0;
+}
+.chapter[data-flip="true"] .chapterMedia {
+  order: 2;
+}
+.chapter[data-bare="true"] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 900px;
+  margin-inline: auto;
+  width: 100%;
+}
+.chapter[data-bare="true"] .chapterText {
+  display: none;
+}
+.chapterMedia {
+  margin: 0;
+  min-width: 0;
+  border: 1px solid #544727;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+}
+.root .chapterMedia .frameButton {
+  height: auto;
+}
+.root .chapterMedia .frameButton img {
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+}
+.chapterText {
+  min-width: 0;
+  padding-left: 20px;
+  border-left: 2px solid #b69a49;
+}
+.chapterNumber {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  color: #b69a49;
+}
+.chapterText p {
+  margin: 0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.02rem, 2.4cqw, 1.3rem);
+  line-height: 1.8;
+  color: #e8e0d2;
+  white-space: pre-wrap;
+}
+
+/* ------------------------------- Story: filmstrip ------------------------------- */
+.filmstrip {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr);
+  margin: 0;
+  min-width: 0;
+  border: 1px solid #514326;
+  border-radius: 16px;
+  background: #100e09;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.root .stage .stageButton {
+  height: clamp(280px, 40cqw, 510px);
+  min-width: 0;
+  padding: clamp(10px, 2cqw, 24px);
+  background: #050505;
+}
+.root .stage .stageButton img {
+  object-fit: contain;
+  animation: stageIn 0.3s ease;
+}
+@keyframes stageIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.stageCaption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 0;
+  gap: 22px;
+  padding: clamp(22px, 3cqw, 40px);
+  border-left: 1px solid #3b321f;
+  background: linear-gradient(145deg, #1c180f, #0e0c09);
+}
+.stageCount {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #d9bd67;
+}
+.stageCaption p {
+  margin: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.05rem, 1.9cqw, 1.4rem);
+  line-height: 1.75;
+  color: #e3dbcd;
+  white-space: pre-wrap;
+}
+.stageCaption .stageHint {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #a99f8c;
+}
+.filmControls { display: flex; gap: 12px; }
+.root .navButton {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid #8d783e;
+  border-radius: 50%;
+  background: #241f13;
+  color: #f2eeeb;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.root .navButton:disabled { opacity: 0.3; cursor: default; }
+.reel {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 8px 2px 14px;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: #756334 transparent;
+}
+.root .reelButton {
+  flex: 0 0 auto;
+  width: 100px;
+  height: 76px;
+  padding: 3px;
+  border: 1px solid #3b3425;
+  border-radius: 8px;
+  background: #0b0a08;
+  opacity: 0.5;
+  cursor: pointer;
+  overflow: hidden;
+  scroll-snap-align: center;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+.root .reelButton[aria-current="true"] {
+  opacity: 1;
+  border-color: #e7c84c;
+  background: #3d3217;
+}
+.root .reelButton img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+@container album (max-width: 760px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .root .stage .stageButton { height: clamp(220px, 60cqw, 420px); }
+  .stageCaption { border-left: 0; border-top: 1px solid #3b321f; gap: 14px; padding: 22px; }
+  .stageCaption p { font-size: 1.05rem; max-height: 200px; }
+}
+/* ---------------------------------- Behaviour ---------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  .gridFigure:hover {
+    transform: translateY(-4px);
+    border-color: #93804a;
+  }
+  .root .reelButton:hover {
+    opacity: 0.9;
+  }
+  /* With a mouse, captions on tight frames appear on hover or focus only. */
+  .overlayCaption {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .frame:hover .overlayCaption,
+  .frame:focus-within .overlayCaption {
+    opacity: 1;
+  }
+}
+
+@container album (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones: hangs reflow to two columns; wide frames and a lone last frame take
+   the full row. The DOM order, and so the reading order, does not change. */
+@container album (max-width: 640px) {
+  .wall {
+    gap: 28px;
+    padding: 10px;
+  }
+  .cluster,
+  .mosaic .cluster {
+    width: 100%;
+    aspect-ratio: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    gap: 10px;
+  }
+  .mosaic .cluster {
+    gap: 4px;
+  }
+  .frame {
+    grid-column: auto;
+    grid-row: auto;
+    aspect-ratio: 1;
+  }
+  .frame.wide,
+  .frame:only-child,
+  .frame:last-child:nth-child(odd),
+  .tiles .frame:first-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+  .chapter,
+  .chapter[data-bare="true"] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .chapter[data-flip="true"] .chapterMedia {
+    order: 0;
+  }
+  .root .navButton {
+    width: 44px;
+    height: 44px;
+  }
+  .root .reelButton {
+    width: 72px;
+    height: 56px;
+  }
+}
+@container album (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gridFigure,
+  .root .reelButton,
+  .overlayCaption {
+    transition: none;
+  }
+  .gridFigure:hover {
+    transform: none;
+  }
+  .root .stage .stageButton img {
+    animation: none;
+  }
+  .reel {
+    scroll-behavior: auto;
+  }
+}

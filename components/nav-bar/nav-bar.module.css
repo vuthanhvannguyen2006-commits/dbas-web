@@ -229,7 +229,7 @@
 }
 
 /* Hamburger responsive display */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav_spacer {
     height: 64px;
   }

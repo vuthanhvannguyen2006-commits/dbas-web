@@ -1,0 +1,9 @@
+.claude/
+AGENTS.md
+CODEX_HANDOVER.md
+.env*
+tests/
+supabase/
+scripts/dev-local.mjs
+coverage/
+*.tsbuildinfo
