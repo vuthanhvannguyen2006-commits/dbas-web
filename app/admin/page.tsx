@@ -18,6 +18,18 @@ export default function AdminOverviewPage() {
       </p>
 
       <div className={styles.card_grid}>
+        <Link href="/admin/gallery" className={styles.card}>
+          <h2>Gallery</h2>
+          <p>Create albums, add photos and publish memories.</p>
+          <span className={styles.card_cta}>Open Gallery</span>
+        </Link>
+        {role === "admin" && (
+          <Link href="/admin/past-members" className={styles.card}>
+            <h2>Past Members</h2>
+            <p>Celebrate former members in the Hall of Memories.</p>
+            <span className={styles.card_cta}>Open Past Members</span>
+          </Link>
+        )}
         <Link href="/admin/events" className={styles.card}>
           <h2>Events</h2>
           <p>

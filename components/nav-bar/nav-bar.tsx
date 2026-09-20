@@ -12,7 +12,7 @@ export default function NavBar() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > 1024) {
         setMenuOpen(false);
       }
     };
@@ -85,7 +85,8 @@ export default function NavBar() {
                   Events
                 </span> 
             </Link></li>
-          </ul>  
+          <li><Link href="/hall-of-memories" className={styles.nav_item}><span className={styles.nav_text}>Hall of Memories</span></Link></li>
+        </ul>
           {/* "Join Us" button */}
           <a className={styles.nav_button} href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
                 <Button text="Join Us"/>
@@ -127,7 +128,7 @@ export default function NavBar() {
               <li><Link href="/" className={styles.hamburger_link} onClick={closeMenu}>Home</Link></li>
               <li><Link href="/about" className={styles.hamburger_link} onClick={closeMenu}>About Us</Link></li>
               <li><Link href="/events" className={styles.hamburger_link} onClick={closeMenu}>Events</Link></li>
-              <li className={styles.mobileJoinItem}><a className={styles.mobileJoin} href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
+              <li><Link href="/hall-of-memories" className={styles.hamburger_link} onClick={closeMenu}>Hall of Memories</Link></li><li className={styles.mobileJoinItem}><a className={styles.mobileJoin} href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
                 <Button text="Join Us"/>
               </a></li>
           </ul>

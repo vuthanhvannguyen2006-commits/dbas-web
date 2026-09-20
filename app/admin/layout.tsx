@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AdminSessionProvider, useAdminSession } from "@/components/admin/admin-session";
+import {
+  AdminSessionProvider,
+  useAdminSession,
+} from "@/components/admin/admin-session";
 import SignInForm from "@/components/admin/sign-in-form";
 import styles from "./admin.module.css";
 
@@ -16,8 +19,8 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
         <div className={styles.sign_in_card}>
           <h1 className={styles.sign_in_heading}>Not configured</h1>
           <p className={styles.sign_in_sub}>
-            NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are missing
-            from this deployment&apos;s environment variables.
+            NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are
+            missing from this deployment&apos;s environment variables.
           </p>
         </div>
       </div>
@@ -44,7 +47,9 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
             This account has no role assigned yet. An admin needs to add it in
             Supabase before you can manage content.
           </p>
-          <button className={styles.ghost_button} onClick={signOut}>Sign out</button>
+          <button className={styles.ghost_button} onClick={signOut}>
+            Sign out
+          </button>
         </div>
       </div>
     );
@@ -53,9 +58,15 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
   const tabs = [
     { href: "/admin", label: "Overview" },
     { href: "/admin/events", label: "Events" },
+    { href: "/admin/gallery", label: "Gallery" },
     // Editors are not offered the team section. The database refuses their
     // writes regardless — this only avoids showing a door that will not open.
-    ...(role === "admin" ? [{ href: "/admin/team", label: "Team" }] : []),
+    ...(role === "admin"
+      ? [
+          { href: "/admin/team", label: "Team" },
+          { href: "/admin/past-members", label: "Past Members" },
+        ]
+      : []),
   ];
 
   return (
@@ -71,7 +82,9 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
               <Link
                 key={tab.href}
                 href={tab.href}
-                className={pathname === tab.href ? styles.tab_active : styles.tab}
+                className={
+                  pathname === tab.href ? styles.tab_active : styles.tab
+                }
               >
                 {tab.label}
               </Link>
@@ -81,7 +94,9 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
           <div className={styles.account}>
             <span className={styles.role_pill}>{role}</span>
             <span className={styles.email}>{email}</span>
-            <button className={styles.ghost_button} onClick={signOut}>Sign out</button>
+            <button className={styles.ghost_button} onClick={signOut}>
+              Sign out
+            </button>
           </div>
         </div>
       </header>
@@ -91,7 +106,11 @@ function AdminChrome({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <AdminSessionProvider>
       <AdminChrome>{children}</AdminChrome>

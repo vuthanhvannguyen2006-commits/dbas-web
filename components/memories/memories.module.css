@@ -1,0 +1,442 @@
+.shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 75vh;
+  background: #090909;
+  color: #f2eeeb;
+  padding: 58px max(24px, calc((100vw - 1160px) / 2)) 100px;
+}
+.shell > :not(.atmosphere):not(dialog) {
+  position: relative;
+  z-index: 1;
+}
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding: 74px 0 72px;
+  margin-bottom: 12px;
+}
+.hero > :not(.atmosphere) {
+  position: relative;
+  z-index: 1;
+}
+.shell h1 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(2.7rem, 6vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin: 22px 0;
+  color: #e7c84c;
+  max-width: 980px;
+  overflow-wrap: anywhere;
+}
+.shell h2 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.35;
+  margin: 0 0 12px;
+}
+.eyebrow {
+  color: #d3bd78;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  line-height: 1.8;
+  font-weight: 600;
+  margin: 0;
+}
+.intro {
+  max-width: 530px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #cfc7bd;
+  margin: 0;
+}
+.heroDetail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  width: 150px;
+}
+.heroDetail span {
+  height: 1px;
+  background: #756334;
+  flex: 1;
+}
+.heroDetail i {
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: #b69a49;
+}
+.atmosphere {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  overflow: clip;
+  clip-path: inset(0);
+  inset: 0;
+  background: radial-gradient(ellipse at 82% 20%, #17150866, transparent 62%);
+}
+.particleCanvas {
+  position: fixed;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+}
+.tabs,
+.pagination,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 24px 0;
+}
+.shell a {
+  color: inherit;
+}
+.shell button,
+.pagination a {
+  border: 1px solid #82722d;
+  border-radius: 8px;
+  padding: 12px 18px;
+  color: #f2eeeb;
+  background: #201b11;
+  cursor: pointer;
+  text-decoration: none;
+  font: inherit;
+}
+.tabs {
+  width: fit-content;
+  padding: 5px;
+  gap: 4px;
+  border: 1px solid #493d24;
+  border-radius: 12px;
+  background: #17130e;
+  margin: 8px 0 36px;
+}
+.tabs a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #d4cdc3;
+  font-size: 0.94rem;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.tabs a:hover {
+  background: #2c2416;
+  color: #fff;
+}
+.tabs a[aria-current="page"] {
+  background: #e7c84c;
+  color: #100d09;
+  font-weight: 600;
+}
+.shell button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.shell :focus-visible,
+.viewer :focus-visible {
+  outline: 3px solid #e7c84c;
+  outline-offset: 4px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 28px;
+  align-items: start;
+}
+.card {
+  border: 1px solid #463a24;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #19140f;
+  min-width: 0;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease;
+}
+.card > a {
+  display: block;
+  text-decoration: none;
+}
+.card:focus-within {
+  border-color: #e7c84c;
+  outline: 2px solid #e7c84c;
+  outline-offset: 4px;
+}
+.card img,
+.photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.card img {
+  border-bottom: 1px solid #463a24;
+}
+.albumCover {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #090909;
+  border-bottom: 1px solid #463a24;
+}
+.albumCover img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.copy {
+  padding: 25px;
+  overflow-wrap: anywhere;
+}
+.copy p {
+  line-height: 1.7;
+  color: #cfc7bd;
+  margin: 8px 0;
+}
+.copy .cardLink {
+  color: #dfc76f;
+  border-top: 1px solid #3c3220;
+  margin: 22px 0 0;
+  padding-top: 18px;
+  font-size: 0.86rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cardLink span {
+  font-size: 1.2rem;
+  transition: transform 0.22s ease;
+}
+.copy summary {
+  color: #dfc76f;
+  cursor: pointer;
+  width: fit-content;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+.initials {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4/3;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 3rem;
+  color: #e7c84c;
+  background: #201a11;
+  border-bottom: 1px solid #463a24;
+}
+.initials::before {
+  content: "";
+  width: 108px;
+  height: 108px;
+  border: 1px solid #65532d;
+  border-radius: 50%;
+  position: absolute;
+}
+.story {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+  max-width: 760px;
+  color: #d6cec2;
+}
+.shell .backLink {
+  color: #d9c576;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 0;
+  font-size: 0.9rem;
+}
+.shell .backLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.shell .photo {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #544727;
+  background: #1c160f;
+  text-align: left;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease;
+}
+.photo span {
+  display: block;
+  padding: 17px 19px;
+  line-height: 1.6;
+}
+.photoFigure {
+  margin: 0;
+  min-width: 0;
+  border: 1px solid #544727;
+  border-radius: 12px;
+  background: #1c160f;
+}
+.shell .photoFigure .photo {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  transform: none;
+}
+.photoFigure:focus-within {
+  outline: 3px solid #e7c84c;
+  outline-offset: 4px;
+}
+.photoDescription {
+  padding: 18px 20px 22px;
+  color: #ddd5c8;
+  font-size: 0.96rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.notice {
+  border: 1px solid #544727;
+  padding: 28px;
+  border-radius: 12px;
+  margin: 28px 0;
+  line-height: 1.8;
+}
+.pagination {
+  justify-content: center;
+  margin-top: 38px;
+}
+.pagination span {
+  color: #d0c7b8;
+  font-size: 0.9rem;
+}
+.viewer {
+  border: 0;
+  padding: 18px;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  box-sizing: border-box;
+  color: white;
+  background: #080706;
+}
+.viewer::backdrop {
+  background: #000d;
+}
+.viewerContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.viewer img {
+  object-fit: contain;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+}
+.viewerControls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.viewer button {
+  padding: 12px 20px;
+  background: #e7c84c;
+  color: #100d09;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.viewer p {
+  margin: 0;
+  text-align: center;
+  white-space: pre-wrap;
+  max-height: 15vh;
+  overflow: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover,
+  .shell .photo:hover {
+    transform: translateY(-4px);
+    border-color: #93804a;
+  }
+  .card:hover .cardLink span {
+    transform: translateX(3px);
+  }
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .shell {
+    padding: 28px 20px 64px;
+  }
+  .hero {
+    padding: 34px 0 70px;
+  }
+  .shell h1 {
+    font-size: clamp(2.5rem, 11vw, 3.3rem);
+    margin: 18px 0;
+  }
+  .eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    max-width: 280px;
+  }
+  .intro {
+    font-size: 0.95rem;
+    max-width: 310px;
+  }
+  .heroDetail {
+    margin-top: 24px;
+    width: 112px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .tabs {
+    margin-bottom: 28px;
+  }
+  .tabs a {
+    padding: 10px 20px;
+  }
+  .copy {
+    padding: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .shell .photo,
+  .cardLink span,
+  .tabs a {
+    transition: none;
+  }
+  .card:hover,
+  .shell .photo:hover,
+  .card:hover .cardLink span {
+    transform: none;
+  }
+}

@@ -1,0 +1,411 @@
+﻿.editor {
+  min-width: 0;
+}
+.heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.heading > div {
+  max-width: 660px;
+}
+.heading > button {
+  flex-shrink: 0;
+}
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  padding: 0;
+  margin: 24px 0 0;
+}
+.card {
+  min-width: 0;
+  background: #110e0a;
+  border: 1px solid #514326;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.image {
+  position: relative;
+  background: #080706;
+  border-bottom: 1px solid #514326;
+}
+.image img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+}
+.number,
+.cover {
+  position: absolute;
+  top: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #17130ef2;
+  color: #f2eeeb;
+  border: 1px solid #8a7535;
+  font-size: 13px;
+}
+.number {
+  left: 12px;
+}
+.cover {
+  right: 12px;
+  background: #e7c84c;
+  color: #17130e;
+  font-weight: 700;
+}
+.body {
+  padding: 18px;
+}
+.order {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.order > span {
+  margin-right: auto;
+  color: #dfcb87;
+}
+.editor .order button {
+  padding: 8px 12px;
+}
+.accessibility {
+  color: #c8bdac;
+  font-size: 14px;
+  margin: 16px 0;
+}
+.accessibility summary {
+  cursor: pointer;
+  padding: 8px 0;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.actions p {
+  width: 100%;
+  margin: 4px 0;
+}
+.unsaved {
+  color: #e7cf88;
+  font-size: 14px;
+}
+.missing {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid #8a7535;
+}
+.missing textarea {
+  width: 100%;
+  min-height: 100px;
+}
+@media (max-width: 1150px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .heading {
+    flex-direction: column;
+  }
+  .image img {
+    height: 240px;
+  }
+}
+.dragHandle {
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.dragHandle:active {
+  cursor: grabbing;
+}
+.dragging {
+  opacity: 0.55;
+}
+.dropTarget {
+  outline: 3px solid #e7c84c;
+  outline-offset: 4px;
+  position: relative;
+}
+.dropTarget::before {
+  content: "Drop here";
+  display: block;
+  background: #e7c84c;
+  color: #17130e;
+  text-align: center;
+  padding: 6px;
+  font-weight: 700;
+}
+.coverEditor {
+  border: 1px solid #62502c;
+  background: #110e0a;
+  padding: 22px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.coverEditor h3 {
+  color: #e7c84c;
+  margin: 0 0 12px;
+}
+.coverEditor > p,
+.framing > p {
+  color: #cec4b5;
+  line-height: 1.7;
+}
+.framing {
+  max-width: 540px;
+  margin: 20px 0;
+}
+.framePreview {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #080706;
+  border: 1px solid #62502c;
+  touch-action: none;
+  cursor: grab;
+}
+.framePreview:active {
+  cursor: grabbing;
+}
+.framePreview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+.framing label {
+  display: grid;
+  gap: 8px;
+  color: #ded3c3;
+  margin: 16px 0;
+}
+.framing input {
+  width: 100%;
+  accent-color: #e7c84c;
+}
+.framePositions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.framePositions input {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 10px;
+  background: #19130d;
+  color: white;
+  border: 1px solid #7d6837;
+  border-radius: 5px;
+}
+.compactGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  gap: 10px;
+  margin: 20px 0;
+}
+.tile {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1;
+  border-radius: 9px;
+  background: #070605;
+}
+.editor .thumbnailButton {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid #64532e;
+  border-radius: 9px;
+  overflow: hidden;
+  background: #070605;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.editor .thumbnailButton.arranging {
+  touch-action: none;
+}
+.thumbnailButton img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+.tileNumber,
+.tileCover,
+.tileDirty {
+  position: absolute;
+  pointer-events: none;
+  color: #fff;
+  background: #100d09df;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.tileNumber {
+  top: 7px;
+  left: 7px;
+}
+.tileCover {
+  top: 7px;
+  right: 7px;
+  color: #161008;
+  background: #e7c84c;
+}
+.tileDirty {
+  bottom: 7px;
+  left: 7px;
+}
+.editor .detailsButton {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  background: #100d09e8;
+  color: #fff;
+  border: 1px solid #c4a650;
+  font-size: 18px;
+}
+.insertion {
+  outline: 3px solid #e7c84c;
+  outline-offset: 2px;
+}
+.insertion::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -6px;
+  width: 3px;
+  background: #e7c84c;
+  pointer-events: none;
+}
+.floatingPhoto {
+  position: fixed;
+  z-index: 100000;
+  pointer-events: none;
+  width: 105px;
+  height: 105px;
+  object-fit: cover;
+  border: 3px solid #e7c84c;
+  border-radius: 10px;
+  opacity: 0.9;
+  transform: rotate(4deg);
+}
+.statusLine {
+  min-height: 44px;
+  line-height: 1.6;
+  color: #cfc4b3;
+}
+.detailsDialog {
+  width: min(1050px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: #17130e;
+  color: #f2eeeb;
+  border: 1px solid #756132;
+  border-radius: 14px;
+}
+.detailsDialog::backdrop {
+  background: #000c;
+}
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.dialogHeader h2 {
+  margin: 0;
+}
+.dialogGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+.dialogGrid > div {
+  min-width: 0;
+}
+.detailImage {
+  width: 100%;
+  max-height: 470px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #080706;
+  border-radius: 10px;
+}
+.dialogCover {
+  border-top: 1px solid #514326;
+  margin-top: 22px;
+  padding: 20px 0;
+}
+.dialogCover h3 {
+  margin: 0 0 14px;
+  color: #e7c84c;
+}
+.detailsDialog summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.detailsDialog p {
+  line-height: 1.65;
+}
+@media (max-width: 1100px) {
+  .compactGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .compactGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .dialogGrid {
+    grid-template-columns: 1fr;
+  }
+  .detailsDialog {
+    padding: 16px;
+  }
+  .tileNumber,
+  .tileCover,
+  .tileDirty {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+  .detailImage {
+    max-height: 280px;
+  }
+}
+@media (hover: hover) {
+  .thumbnailButton {
+    touch-action: none;
+  }
+}
