@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { FaLinkedinIn } from "react-icons/fa";
-import Link from "next/link";
+import { trapDialogTab } from "@/lib/dialog-focus";
 
 export type TeamMember = {
   id: string;
@@ -30,24 +30,38 @@ function initialsOf(name: string): string {
 export default function TeamSection({ members }: { members: TeamMember[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const active = activeIndex === null ? null : members[activeIndex];
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const isOpen = Boolean(active);
 
   // Close on Escape, navigate with arrow keys while the modal is open.
   useEffect(() => {
-    if (activeIndex === null) return;
+    const dialog = dialogRef.current;
+    if (!isOpen || !dialog) return;
+    const opener = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    dialog.showModal();
+    dialog.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setActiveIndex(null);
-      if (e.key === "ArrowRight") setActiveIndex((i) => (i === null ? i : Math.min(i + 1, members.length - 1)));
-      if (e.key === "ArrowLeft") setActiveIndex((i) => (i === null ? i : Math.max(i - 1, 0)));
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setActiveIndex((i) => (i === null ? i : Math.min(i + 1, members.length - 1)));
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setActiveIndex((i) => (i === null ? i : Math.max(i - 1, 0)));
+      }
     }
 
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      opener?.focus({ preventScroll: true });
     };
-  }, [activeIndex, members.length]);
+  }, [isOpen, members.length]);
 
   return (
     <section className="about-team">
@@ -103,11 +117,12 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
       </div>
 
       {active && (
-        <div
+        <dialog
+          ref={dialogRef}
           className="about-modalBackdrop"
-          role="dialog"
-          aria-modal="true"
           aria-label={`More about ${active.name}`}
+          onKeyDown={trapDialogTab}
+          onCancel={(event) => { event.preventDefault(); setActiveIndex(null); }}
           onClick={() => setActiveIndex(null)}
         >
           <div className="about-modal" onClick={(e) => e.stopPropagation()}>
@@ -191,7 +206,7 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
               </div>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </section>
   );

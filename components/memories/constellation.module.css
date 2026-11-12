@@ -1,0 +1,759 @@
+/* Past-member constellations in the Hall of Memories. */
+.section {
+  margin-top: 8px;
+}
+/* Lift the cohort above later Hall content while the mobile sheet is open. */
+.section:has(.panel.open) {
+  z-index: 5;
+}
+.years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 28px;
+}
+.years button[aria-pressed="true"] {
+  background: #e7c84c;
+  color: #100d09;
+  border-color: #e7c84c;
+  font-weight: 600;
+}
+.cohort {
+  position: relative;
+}
+.head {
+  position: relative;
+  text-align: center;
+  margin: 28px 0 0;
+}
+.head h2 {
+  font-size: clamp(2.2rem, 5.2vw, 4rem);
+  color: #f3ecdd;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+.head h2 span {
+  color: #e7c84c;
+}
+.head .motionToggle {
+  border: 0;
+  background: transparent;
+  color: #b9ae97;
+  padding: 10px 16px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  min-height: 44px;
+}
+.head .motionToggle:hover {
+  color: #f4d986;
+}
+
+/* Sky and panel side by side on wide screens. */
+.stage {
+  position: relative;
+  min-width: 0;
+  padding-top: 12px;
+  isolation: isolate;
+}
+.figure {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+}
+.sky {
+  position: relative;
+  width: min(100%, calc(min(85vh, 900px) * var(--ratio, 1)));
+  margin: 0 auto;
+  overflow: visible;
+  background: transparent;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.field circle {
+  fill: #f4ead0;
+  opacity: 0.3;
+}
+.twinkle {
+  animation: twinkle 5.5s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Figure lines draw in once the sky enters the viewport. */
+.lines path {
+  fill: none;
+  stroke: #e7c84c;
+  stroke-opacity: 0.3;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.drawn .lines path {
+  animation: drawLink 0.6s ease-out both;
+}
+@keyframes drawLink {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.star {
+  opacity: 0;
+}
+.drawn .star {
+  animation: arrive 0.55s ease-out both;
+  animation-delay: var(--arrive);
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.exploring .star {
+  animation: none;
+  opacity: 1;
+}
+.exploring .lines path {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+.currents path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 3 97;
+  opacity: 0;
+}
+.currents .boltHalo {
+  stroke: #fff;
+  stroke-width: 8;
+}
+.currents .boltColor {
+  stroke: #fff;
+  stroke-width: 3;
+}
+.drawn .currents path {
+  animation: current 9s linear infinite;
+  animation-delay: var(--bolt-delay);
+}
+@keyframes current {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.65;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+.star .core {
+  fill: #fff7e5;
+  transition:
+    r 0.2s ease,
+    fill 0.2s ease;
+}
+.star .glow {
+  opacity: 0.9;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ember 8s ease-in-out infinite;
+  animation-delay: var(--phase);
+}
+.star .aura {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0.7;
+  animation: aurora 11s ease-in-out infinite;
+  animation-delay: var(--phase);
+}
+.starTurn {
+  transform-origin: 0 0;
+  animation: wander var(--sway-duration) ease-in-out infinite;
+  animation-delay: var(--phase);
+}
+.sparkle {
+  fill: #fff;
+  opacity: 0.9;
+  transform-origin: 0 0;
+  animation: rayPulse var(--pulse-duration) ease-in-out infinite;
+  animation-delay: var(--phase);
+}
+.sparkleHalo {
+  stroke: #def4ff;
+  stroke-width: 2;
+}
+@keyframes rayPulse {
+  0%,
+  100% {
+    transform: scale(0.75);
+    opacity: 0.65;
+  }
+  38% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  67% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+}
+@keyframes wander {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  23% {
+    transform: rotate(calc(19deg * var(--turn)));
+  }
+  51% {
+    transform: rotate(calc(-11deg * var(--turn)));
+  }
+  78% {
+    transform: rotate(calc(28deg * var(--turn)));
+  }
+}
+.awake .core {
+  fill: white;
+}
+.awake .sparkle {
+  fill: white;
+  opacity: 1;
+}
+@keyframes ember {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+@keyframes aurora {
+  0%,
+  100% {
+    transform: scale(1.1);
+    opacity: 0.65;
+  }
+  45% {
+    transform: scale(0.8);
+    opacity: 0.25;
+  }
+  75% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+}
+.paused .sky *,
+.paused .sky .currents path {
+  animation-play-state: paused;
+}
+
+.rocketFlight {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  z-index: 3;
+  offset-path: ellipse(42% 39% at 50% 48%);
+  offset-rotate: 0deg;
+  animation: voyage 24s linear infinite;
+}
+.figure button.rocket {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.figure button.rocket:focus-visible {
+  outline: none;
+}
+.rocket:focus-visible svg {
+  filter: drop-shadow(0 0 5px #f8db86);
+}
+.rocket svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: heading 24s linear infinite;
+}
+@keyframes voyage {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+@keyframes heading {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(450deg);
+  }
+}
+.rocketStopped,
+.rocketStopped .rocket svg,
+.rocketStopped .credit,
+.paused .rocketFlight,
+.paused .rocket svg,
+.paused .credit {
+  animation-play-state: paused;
+}
+.flame {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: thrust 0.5s ease-in-out infinite alternate;
+}
+@keyframes thrust {
+  to {
+    transform: scaleX(0.65);
+    opacity: 0.65;
+  }
+}
+.paused .flame {
+  animation-play-state: paused;
+}
+.credit {
+  position: absolute;
+  bottom: 54px;
+  left: 24px;
+  width: max-content;
+  z-index: 5;
+  pointer-events: none;
+  visibility: hidden;
+  background: #16130ff5;
+  border: 1px solid #a68c46;
+  border-radius: 12px;
+  padding: 9px 12px;
+  color: #ffedba;
+  box-shadow: 0 8px 25px #0006;
+  font-size: 0.8rem;
+  animation: creditAlign 24s linear infinite;
+}
+.creditVisible {
+  visibility: visible;
+}
+@keyframes creditAlign {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  25%,
+  75% {
+    transform: translateX(-50%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+}
+.idle .core {
+  fill: #b9ae92;
+}
+.idle .glow {
+  opacity: 0.25;
+}
+.extra .core {
+  fill: #d9cfb3;
+}
+.extra .glow {
+  opacity: 0.45;
+}
+.ring {
+  fill: none;
+  stroke: #e7c84c;
+  stroke-width: 2.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ring 2.4s ease-in-out infinite;
+}
+@keyframes ring {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.12);
+  }
+}
+
+/* Invisible, round 44px buttons laid over each member's star. */
+.hits {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sky button.hit {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sky button.hit:focus-visible {
+  outline: 2px solid #e7c84c;
+  outline-offset: 2px;
+}
+
+/* Name tag for the hovered, focused or selected star. */
+.tag {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid #6b5a2c;
+  border-radius: 8px;
+  background: #0d0b08ee;
+  color: #f2eeeb;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: normal;
+  width: max-content;
+  max-width: min(270px, calc(100vw - 48px));
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 22px));
+}
+.tag strong {
+  display: block;
+  font-weight: 600;
+}
+.tag span {
+  color: #dfc76f;
+}
+.tag.below {
+  transform: translate(-50%, 22px);
+}
+.tag.alignStart {
+  transform: translate(-14px, calc(-100% - 22px));
+}
+.tag.alignEnd {
+  transform: translate(calc(-100% + 14px), calc(-100% - 22px));
+}
+.tag.below.alignStart {
+  transform: translate(-14px, 22px);
+}
+.tag.below.alignEnd {
+  transform: translate(calc(-100% + 14px), 22px);
+}
+.caption {
+  margin: 12px auto 0;
+  color: #9d9483;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Member panel: a side panel on wide screens. */
+.panel {
+  position: absolute;
+  z-index: 4;
+  top: 40px;
+  right: 0;
+  left: auto;
+  border: 1px solid #8c7644;
+  border-radius: 22px;
+  background: #14120ff7;
+  backdrop-filter: blur(18px);
+  padding: 30px;
+  overflow-wrap: anywhere;
+  margin: 0;
+  width: min(410px, 100%);
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+  box-shadow: 0 20px 70px #000a;
+  box-sizing: border-box;
+  color: #f2eeeb;
+}
+.panel:not([open]) {
+  display: none;
+}
+.panel::backdrop {
+  background: #000b;
+  backdrop-filter: blur(4px);
+}
+.panelTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.portrait {
+  width: 152px;
+  height: 152px;
+  flex: none;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #5c4c28;
+  background: #201a11;
+  display: grid;
+  place-items: center;
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.portrait span {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 2.2rem;
+  color: #e7c84c;
+}
+.panel button.close {
+  padding: 10px 16px;
+  min-height: 44px;
+  font-size: 1rem;
+}
+.panel h3 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 500;
+  font-size: 2.15rem;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  color: #f6efe0;
+}
+.panel h3:focus {
+  outline: none;
+}
+.panel h3:focus-visible {
+  outline: 2px solid #e7c84c;
+  outline-offset: 4px;
+}
+.role {
+  margin: 0;
+  color: #e7c84c;
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+.meta {
+  margin: 4px 0 0;
+  color: #c9c0ae;
+  font-size: 1rem;
+}
+.bio {
+  margin: 22px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid #8c764455;
+  color: #f0eae0;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.placeholder {
+  margin: 0;
+  color: #a79e8d;
+  line-height: 1.7;
+}
+
+/* Plain list of the cohort below the sky. */
+.rosterBlock {
+  margin-top: 36px;
+  border-top: 1px solid #b8994633;
+  padding-top: 22px;
+}
+.rosterHeading {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0 0 14px;
+  color: #f2eeeb;
+  cursor: pointer;
+  padding: 12px 0;
+}
+.roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.roster button.rosterButton {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  padding: 12px 16px;
+  border: 1px solid #3c3220;
+  border-radius: 10px;
+  background: #120f0b;
+  color: #cfc7bd;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.roster button.rosterButton:hover {
+  border-color: #82722d;
+}
+.roster button.rosterButton[aria-current="true"] {
+  border-color: #e7c84c;
+}
+.rosterName {
+  color: #f2eeeb;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Grid fallback heading for members without a constellation. */
+.othersHeading {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 64px 0 0;
+  color: #f2eeeb;
+}
+
+/* Bottom sheet on narrow screens. */
+@media (max-width: 1100px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panel {
+    display: none;
+  }
+  .panel.open[open] {
+    display: block;
+    position: fixed;
+    z-index: 60;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 88dvh;
+    max-width: 560px;
+    width: 100%;
+    margin: auto auto 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 18px 18px 0 0;
+    border-bottom: 0;
+    padding: 20px 20px calc(24px + env(safe-area-inset-bottom));
+    box-shadow: 0 -18px 50px #000c;
+    animation: sheet 0.28s ease-out;
+  }
+  .portrait {
+    width: 112px;
+    height: 112px;
+  }
+  .panel h3 {
+    font-size: 1.85rem;
+  }
+  .bio {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+}
+@keyframes sheet {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@media (max-width: 560px) {
+  .sky {
+    border-radius: 0;
+  }
+  .tag {
+    font-size: 0.9rem;
+    padding: 8px 11px;
+  }
+  .roster {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rocketFlight,
+  .rocket svg,
+  .credit,
+  .rocket .flame,
+  .drawn .star,
+  .drawn .lines path,
+  .star .aura,
+  .star .glow,
+  .starTurn,
+  .sparkle,
+  .drawn .currents path,
+  .twinkle,
+  .ring,
+  .panel.open[open] {
+    animation: none;
+  }
+  .lines path {
+    transition: none;
+    stroke-dashoffset: 0;
+  }
+  .star .core {
+    transition: none;
+  }
+  .motionToggle {
+    display: none;
+  }
+  .star {
+    opacity: 1;
+  }
+  .rocketFlight {
+    offset-distance: 10%;
+  }
+  .credit {
+    transform: translateX(-100%);
+  }
+}

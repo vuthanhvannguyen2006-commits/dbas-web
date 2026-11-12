@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, MouseEvent } from "react";
+import { useState, useSyncExternalStore, type MouseEvent } from "react";
 import styles from "./hover-card.module.css";
 import MaxWidth from "../max-width/max-width";
 
@@ -67,6 +67,15 @@ const pillars: Pillar[] = [
   },
 ];
 
+const touchQuery = "(hover: none), (pointer: coarse)";
+function subscribeTouch(onChange: () => void) {
+  const media = window.matchMedia(touchQuery);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+const getTouchSnapshot = () => window.matchMedia(touchQuery).matches;
+const getServerTouchSnapshot = () => false;
+
 export default function HoverCard() {
   const [activeId, setActiveId] = useState<string>(pillars[0].id);
   const [tooltip, setTooltip] = useState<TooltipState>({
@@ -74,15 +83,7 @@ export default function HoverCard() {
     x: 0,
     y: 0,
   });
-  const [isTouch, setIsTouch] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(hover: none), (pointer: coarse)");
-    setIsTouch(mq.matches);
-    const listener = (e: MediaQueryListEvent) => setIsTouch(e.matches);
-    mq.addEventListener("change", listener);
-    return () => mq.removeEventListener("change", listener);
-  }, []);
+  const isTouch = useSyncExternalStore(subscribeTouch, getTouchSnapshot, getServerTouchSnapshot);
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>): void => {
     if (isTouch) return;

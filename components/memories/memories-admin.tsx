@@ -456,6 +456,11 @@ function Editor({
                   setDirty(true);
                 }}
               />
+              <small className={s.hint}>
+                Use a four-digit year such as 2026. Where a constellation is
+                available, members appear in its sky; otherwise they appear as
+                cards. For a range, the last year counts.
+              </small>
             </label>
           </>
         )}
