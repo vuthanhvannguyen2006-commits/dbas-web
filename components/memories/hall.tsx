@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { database } from "@/lib/memories";
+import { groupCohorts } from "@/lib/constellations";
 import {
   initials,
   coverImageStyle,
@@ -14,7 +15,9 @@ import {
 } from "@/lib/memories-core";
 import { useLive } from "./use-live";
 import s from "./memories.module.css";
+import c from "./constellation.module.css";
 import MemoryAtmosphere from "./memory-atmosphere";
+import Constellations from "./constellation";
 export function LoadNotice({
   loading,
   error,
@@ -157,31 +160,43 @@ export function displayDate(date: string) {
 function PastMembers() {
   const [page, setPage] = useState(1);
   const load = useCallback(async () => {
-    const [start, end] = pageRange(page, 12);
-    const r = await database()
-      .from("past_members")
-      .select("*", { count: "exact" })
-      .eq("is_published", true)
-      .order("sort_order")
-      .order("created_at")
-      .order("id")
-      .range(start, end);
-    if (r.error) throw new Error(r.error.message);
-    return { rows: r.data as PastMember[], count: r.count ?? 0 };
-  }, [page]);
+    const rows: PastMember[] = [];
+    for (let offset = 0; ; offset += 500) {
+      const r = await database()
+        .from("past_members")
+        .select("*")
+        .eq("is_published", true)
+        .order("sort_order")
+        .order("created_at")
+        .order("id")
+        .range(offset, offset + 499);
+      if (r.error) throw new Error(r.error.message);
+      rows.push(...((r.data ?? []) as PastMember[]));
+      if ((r.data?.length ?? 0) < 500) break;
+    }
+    return groupCohorts(rows);
+  }, []);
   const state = useLive(load);
+  const cohorts = state.data?.cohorts ?? [];
+  const others = state.data?.others ?? [];
+  const [start, end] = pageRange(page, 12);
   return (
     <>
       <LoadNotice {...state} />
       {state.data && (
         <>
-          {!state.data.rows.length ? (
+          {cohorts.length > 0 && <Constellations cohorts={cohorts} />}
+          {!cohorts.length && !others.length && (
             <p className={s.notice}>
               Past members will be celebrated here soon.
             </p>
-          ) : (
+          )}
+          {others.length > 0 && cohorts.length > 0 && (
+            <h2 className={c.othersHeading}>More past members</h2>
+          )}
+          {others.length > 0 && (
             <div className={s.grid}>
-              {state.data.rows.map((m) => (
+              {others.slice(start, end + 1).map((m) => (
                 <article className={s.card} key={m.id}>
                   {m.thumbnail_url ? (
                     <img src={m.thumbnail_url} alt={m.name} loading="lazy" />
@@ -208,7 +223,7 @@ function PastMembers() {
           <Pagination
             page={page}
             size={12}
-            count={state.data.count}
+            count={others.length}
             change={setPage}
           />
         </>

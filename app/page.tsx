@@ -81,7 +81,7 @@ export default function Home() {
           <div className="ending_join_overlay" />
           <div className="ending_join_content">
             <div className="ending_join_text">
-              <img className="ending_logo" src="./dbas-logo.png" />
+              <img className="ending_logo" src="./dbas-logo.png" alt="DBAS" />
               <h1 className="heading_on_black">
                 JOIN US <span className="heading_accent">NOW</span>
               </h1>
