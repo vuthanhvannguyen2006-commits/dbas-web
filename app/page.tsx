@@ -98,7 +98,7 @@ export default function Home() {
               </a>
               <a
                 className="nav_button"
-                href="https://www.dusa.org.au/clubs/deakin-business-and-analytics-society-dbas">
+                href="mailto:dbasdeakin@gmail.com">
                 <Button text="Send Us an Email" />
               </a>
             </div>
